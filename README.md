@@ -34,7 +34,9 @@ MASLAB inclui alguns métodos embutidos no código de simulação de cada tanque
 MASLAB foi escrito em C# e XAML utilizando o [.net Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/current/runtime) e o framework gráfico [Avalonia UI](https://avaloniaui.net/).  Atualmente o .net Core 3.1 e Avalonia possuem suporte para Windows, Linux e MacOS.
 
 # Instalação
-Você pode fazer o download do software [aqui](https://github.com/italoaguiar/MASLAB/raw/master/bin/source.zip). Após o download, você pode descompactar o arquivo para uma pasta de sua preferência.
+[![link](https://1.bp.blogspot.com/-dKrfiTIL1V0/XlamZipMrtI/AAAAAAAACiQ/o2npxeDg0mgT4yk9yGdHCwrBOpEJI9b0gCLcBGAsYHQ/s1600/download.png)](https://github.com/italoaguiar/MASLAB/raw/master/bin/source.zip) 
+
+Você pode fazer o download do software clicando no botão acima ou clicando [aqui](https://github.com/italoaguiar/MASLAB/raw/master/bin/source.zip). Após o download, você pode descompactar o arquivo para uma pasta de sua preferência.
 
 Para executar o software, o único requisito inicial é ter o **.net Core 3.1 runtime** instalado no computador. Você pode fazer a instalação seguindo as intruções nos links abaixo:
 
@@ -70,5 +72,7 @@ Obs: Este comando também é válido para o ambiente Windows.
 # Sobre o software
 Desenvolvido por [Ítalo A. Aguiar](https://github.com/italoaguiar/)
 Sob orientação de Rodrigo Augusto Ricco.
+
 Instituto de Ciências Exatas e Aplicadas - ICEA
+
 Universidade Federal de Ouro Preto - UFOP
