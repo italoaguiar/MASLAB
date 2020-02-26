@@ -1,0 +1,364 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MASLAB.ViewModels;assembly=MASLAB"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+        xmlns:dc="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
+        xmlns:e="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        xmlns:m="clr-namespace:MASLAB.Views;assembly=MASLAB"
+        xmlns:plot="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
+        xmlns:dt="clr-namespace:MASLAB.Services;assembly=MASLAB"
+        x:Class="MASLAB.Views.MainWindow"
+        WindowState="Maximized"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="MASLAB - UNIVERSIDADE FEDERAL DE OURO PRETO" x:Name="mw">
+
+  <Window.Styles>
+
+    <Style Selector="TabControl">
+      <Setter Property="Background">
+        <Setter.Value>
+          <LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+            <GradientStop Offset="0" Color="#FFFFFFFF"/>
+            <GradientStop Offset="0" Color="#FFF0F0F0"/>
+            <GradientStop Offset="1" Color="#FF959ea3" />
+          </LinearGradientBrush>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style Selector="TabControl WrapPanel">
+      <Setter Property="Background" Value="#2B579A"/>
+    </Style>
+
+    <Style Selector="TabItem">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Height" Value="34"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="Background" Value="#2B579A"/>
+      <Setter Property="Foreground" Value="#F0F0F0"/>
+      <Setter Property="Margin" Value="0 0 0 0"/>
+      <Setter Property="Padding" Value="10 0"/>
+    </Style>
+    <Style Selector="TabItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="#124078"/>
+    </Style>
+
+    <Style Selector="TabItem:focus">
+      <Setter Property="Foreground" Value="#2B579A"/>
+      <Setter Property="Margin" Value="0 0 0 0"/>
+      <Setter Property="Padding" Value="10 0"/>
+    </Style>
+    <Style Selector="TabItem:focus /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="#f0f0f0"/>
+    </Style>
+
+    <Style Selector="TabItem:selected">
+      <Setter Property="Foreground" Value="#2B579A"/>
+      <Setter Property="Margin" Value="0 0 0 0"/>
+      <Setter Property="Padding" Value="10 0"/>
+    </Style>
+    <Style Selector="TabItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="#f0f0f0"/>
+    </Style>
+
+  </Window.Styles>
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+  <Grid RowDefinitions="Auto,Auto,*,Auto" Background="#2B579A">
+    <Menu Foreground="#F0F0F0" Margin="5,5,0,0">
+      <MenuItem Header="Ar_quivo">
+        <MenuItem Header="_Abrir" Command="{Binding OpenCommand}" Foreground="Black">
+          <MenuItem.Icon>
+            <Image Source="/Assets/open-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_Salvar" Command="{Binding SaveCommand}" Foreground="Black">
+          <MenuItem.Icon>
+            <Image Source="/Assets/save-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Command="{Binding ExportCommand}" CommandParameter="{Binding ElementName=tabControl}" Header="Expor_tar" Foreground="Black">
+          <MenuItem.Icon>
+            <Image Source="/Assets/export-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="Sair" Foreground="Black"/>
+      </MenuItem>
+      <MenuItem Header="_Editar">
+        <MenuItem Header="Editor de _Código" Foreground="Black">
+          <MenuItem.Icon>
+            <Image Source="/Assets/editor-icon.png"/>
+          </MenuItem.Icon>
+          <MenuItem Header="_Configurar" Foreground="Black">
+            <MenuItem.Icon>
+              <Image Source="/Assets/cog-icon.png"/>
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+      </MenuItem>
+      <MenuItem Header="_Simulação">
+        <MenuItem Header="_Iniciar" Foreground="Black" Command="{Binding StartCommand}">
+          <MenuItem.Icon>
+            <Image Source="/Assets/play-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_Pausa" Foreground="Black" Command="{Binding PauseCommand}">
+          <MenuItem.Icon>
+            <Image Source="/Assets/pause-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Para_r" Foreground="Black" Command="{Binding StopCommand}">
+          <MenuItem.Icon>
+            <Image Source="/Assets/stop-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="_Configurar Simulação" Command="{Binding SimulationSettingsCommand}" Foreground="Black">
+          <MenuItem.Icon>
+            <Image Source="/Assets/cog-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="_Hardware" Foreground="Black">
+          <MenuItem Header="_Configurar Dispositivo" Foreground="Black">
+            <MenuItem.Icon>
+              <Image Source="/Assets/cog-icon.png"/>
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>        
+      </MenuItem>
+      <MenuItem Header="_Ajuda">
+        <MenuItem Header="_Sobre o Software" Foreground="Black">
+          <MenuItem.Icon>
+            <Image Source="/Assets/info-icon.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+      </MenuItem>
+    </Menu>
+
+    <StackPanel Orientation="Horizontal" Grid.Row="1"  Margin="0,5">
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30" Command="{Binding OpenCommand}">
+        <Image Source="/Assets/open-icon.png"/>
+      </Button>
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30" Command="{Binding SaveCommand}">
+        <Image Source="/Assets/save-icon.png"/>
+      </Button>
+      <Line StartPoint="0,0" EndPoint="0,1" VerticalAlignment="Stretch" Stretch="Fill" Stroke="#F0F0F0" StrokeThickness="1" Margin="5"/>
+      <Button Command="{Binding ExportCommand}" CommandParameter="{Binding ElementName=tabControl}" Background="Transparent" BorderBrush="Transparent" Width="30">
+        <Image Source="/Assets/export-icon.png"/>
+      </Button>
+      <Line StartPoint="0,0" EndPoint="0,1" VerticalAlignment="Stretch" Stretch="Fill" Stroke="#F0F0F0" StrokeThickness="1" Margin="5"/>
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30" Command="{Binding StartCommand}">
+        <Image Source="/Assets/play-icon.png"/>
+      </Button>
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30" Command="{Binding PauseCommand}">
+        <Image Source="/Assets/pause-icon.png"/>
+      </Button>
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30" Command="{Binding StopCommand}">
+        <Image Source="/Assets/stop-icon.png"/>
+      </Button>
+    </StackPanel>
+    
+    <Grid Grid.Row="2">      
+      <TabControl Name="tabControl">
+        <TabItem Header="Diagrama">
+          <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible">
+            <StackPanel>
+              <StackPanel.Background>
+                <VisualBrush TileMode="Tile"
+                    SourceRect="0,0,75,75"
+                    DestinationRect="0,0,75,75">
+                  <VisualBrush.Visual>
+                    <Rectangle  Stroke="Darkgray" StrokeThickness=".5" Height="75" Width="75">
+                      <Rectangle.Fill>
+                        <VisualBrush TileMode="Tile"
+                            SourceRect="0,0,15,15"
+                            DestinationRect="0,0,15,15">
+                          <VisualBrush.Visual>
+                            <!--#FF494949-->
+                            <Rectangle  Stroke="Black" StrokeThickness="0.05" Height="15" Width="15">
+                            </Rectangle>
+                          </VisualBrush.Visual>
+                        </VisualBrush>
+                      </Rectangle.Fill>
+                    </Rectangle>
+                  </VisualBrush.Visual>
+                </VisualBrush>
+              </StackPanel.Background>
+              <Grid Margin="10,10,0,0">
+                <Canvas Name="go">
+                  
+                </Canvas>
+                <ItemsControl  Items="{Binding Project.Levels}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Height="164.5" Margin="0,0,0,15">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                          </Grid.ColumnDefinitions>
+
+                          <Border  BorderBrush="#1f4073" Width="35"  BorderThickness="1,1,0,1" CornerRadius="3,0,0,3">
+                            <Border.Background>
+                              <LinearGradientBrush EndPoint="100%,50%" StartPoint="0%,50%">
+                                <GradientStop Color="#649ffa" Offset="0"/>
+                                <GradientStop Color="#2B579A" Offset="0.1"/>
+                                <GradientStop Color="#1a3b6e" Offset="0.94"/>
+                                <GradientStop Color="#152e54" Offset="1"/>
+                              </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="{Binding Name}" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#F0F0F0">
+                              <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                  <RotateTransform Angle="-90"/>
+                                  <TranslateTransform/>
+                                </TransformGroup>
+                              </TextBlock.RenderTransform>
+                            </TextBlock>
+                          </Border>
+
+                          <Border Grid.Column="1" Background="#BFEDEDED" BorderThickness="0,.5,.5,.5" BorderBrush="#FF3A3A3A">
+                            <StackPanel Orientation="Horizontal">
+                              <ItemsControl Items="{Binding Items}">
+                                <ItemsControl.ItemsPanel>
+                                  <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                  </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                  <DataTemplate>
+                                    <Grid>
+                                      <Grid.ContextMenu>
+                                        <ContextMenu>
+                                          <MenuItem Header="Remover Tanque" Command="{Binding RemoveCommand}" CommandParameter="{Binding}">
+                                            <MenuItem.Icon>
+                                              <Image Source="/Assets/remove-icon.png"/>
+                                            </MenuItem.Icon>
+                                          </MenuItem>
+                                          <MenuItem Header="Redefinir Configurações">
+                                            <MenuItem.Icon>
+                                              <Image Source="/Assets/clear-icon.png"/>
+                                            </MenuItem.Icon>
+                                          </MenuItem>
+                                          <Separator/>
+                                          <MenuItem Header="Propriedades" Command="{Binding $parent[Window].DataContext.ShowTankPropertiesCommand}" CommandParameter="{Binding}">
+                                            <MenuItem.Icon>
+                                              <Image Source="/Assets/tools-icon.png"/>
+                                            </MenuItem.Icon>
+                                          </MenuItem>
+                                        </ContextMenu>
+                                      </Grid.ContextMenu>
+                                      <m:Tank Width="165" Height="105" Margin="25,0,35.5,7" ParentContainer="{Binding #go}" TankData="{Binding}"/>
+                                    </Grid>
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+
+                              <Button Background="#33B6DB4F" BorderBrush="#337D9931" Command="{Binding AddCommand}" ToolTip.Tip="Adicionar um novo tanque">
+                                <Button.Styles>
+                                  <Style Selector="Button">
+                                    <Setter Property="Template">
+                                      <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                          <Border x:Name="border" Width="35" Height="35" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="30">
+                                            <Path Width="18" Height="18" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 2.4,7.36L 7.36,7.36L 7.36,2.4L 8.64,2.4L 8.64,7.36L 13.6,7.36L 13.6,8.64L 8.64,8.64L 8.64,13.6L 7.36,13.6L 7.36,8.64L 2.4,8.64L 2.4,7.36 Z "/>
+                                          </Border>
+                                        </ControlTemplate>
+                                      </Setter.Value>
+                                    </Setter>
+                                  </Style>
+                                  <Style Selector="Button:pointerover /template/ Border#border">
+                                    <Setter Property="Background" Value="#FFB6DB4F"/>
+                                    <Setter Property="BorderBrush" Value="#FF7D9931"/>
+                                  </Style>
+                                  <Style Selector="Button:pressed  /template/ Border#border">
+                                    <Setter Property="Background" Value="#FF95B53C"/>
+                                  </Style>
+                                </Button.Styles>
+                              </Button>
+                            </StackPanel>
+                          </Border>
+                        </Grid>
+
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl Items="{Binding Project.Connections}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <Canvas/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Polyline Points="{Binding Points}"  StrokeThickness="10" Stroke="#FF454545">
+                        <Polyline.ContextMenu>
+                          <ContextMenu>
+                            <MenuItem Header="Remover Cano" Command="{Binding $parent[Window].DataContext.RemovePipeCommand}" CommandParameter="{Binding}">
+                              <MenuItem.Icon>
+                                <Image Source="/Assets/remove-icon.png"/>
+                              </MenuItem.Icon>
+                            </MenuItem>
+                          </ContextMenu>
+                        </Polyline.ContextMenu>
+                      </Polyline>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <m:ConnectorControl IsLinkEnabled="{Binding LinkEnabled}" ParentWindow="{Binding , ElementName=mw}" Points="{Binding PointCollection, Mode=TwoWay}"/>
+              
+              </Grid>
+
+              <!--Add Level Button-->
+              <Button Background="#33B6DB4F" BorderBrush="#337D9931" Command="{Binding AddLevelCommand}" ToolTip.Tip="Adicionar um novo nível">
+                <Button.Styles>
+                  <Style Selector="Button">
+                    <Setter Property="Template">
+                      <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                          <Border x:Name="border" Width="35" Height="35" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="30">
+                            <Path Width="18" Height="18" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 2.4,7.36L 7.36,7.36L 7.36,2.4L 8.64,2.4L 8.64,7.36L 13.6,7.36L 13.6,8.64L 8.64,8.64L 8.64,13.6L 7.36,13.6L 7.36,8.64L 2.4,8.64L 2.4,7.36 Z "/>
+                          </Border>
+                        </ControlTemplate>
+                      </Setter.Value>
+                    </Setter>
+                  </Style>
+                  <Style Selector="Button:pointerover /template/ Border#border">
+                    <Setter Property="Background" Value="#FFB6DB4F"/>
+                    <Setter Property="BorderBrush" Value="#FF7D9931"/>
+                  </Style>
+                  <Style Selector="Button:pressed  /template/ Border#border">
+                    <Setter Property="Background" Value="#FF95B53C"/>
+                  </Style>
+                </Button.Styles>
+              </Button>
+            </StackPanel>
+          </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Gráficos">
+          <plot:PlotView Model="{Binding ., Source={x:Static dt:ChartService.Model}}"/>
+        </TabItem>
+      </TabControl>
+    </Grid>
+
+
+
+    <Border Grid.Row="3" Background="#2B579A" BorderBrush="#1f4073" BorderThickness="0,.7,0,0" Height="30">
+      <StackPanel x:Name="menu" Orientation="Horizontal" IsEnabled="False">        
+        <Line StartPoint="0,0" EndPoint="0,1" VerticalAlignment="Stretch" Stretch="Fill" Stroke="#F0F0F0" StrokeThickness="1" Margin="5"/>
+        <TextBlock Text="{Binding Simulator.SimulationTime}" Foreground="#F0F0F0" VerticalAlignment="Center"/>
+      </StackPanel>
+    </Border>
+  </Grid>
+
+</Window>

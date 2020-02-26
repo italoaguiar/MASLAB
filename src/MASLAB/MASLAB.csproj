@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <AvaloniaResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="*.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Remove="Views\ConnectorControl.xaml" />
+    <AvaloniaResource Remove="Views\MessageBox.xaml" />
+    <AvaloniaResource Remove="Views\SimulationSettings.xaml" />
+    <AvaloniaResource Remove="Views\Tank.xaml" />
+    <AvaloniaResource Remove="Views\TankProperties.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\ConnectorControl.xaml" />
+    <None Remove="Views\MessageBox.xaml" />
+    <None Remove="Views\SimulationSettings.xaml" />    
+    <None Remove="Views\Tank.xaml" />    
+    <None Remove="Views\TankProperties.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.9.3" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.9.0-preview1" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.3" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.3" />
+    <PackageReference Include="MathNet.Numerics" Version="4.9.0" />
+    <PackageReference Include="MathNet.Symbolics" Version="0.20.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.5.0-beta2-final" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.5.0-beta2-final" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Tank.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ConnectorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\TankProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\SimulationSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
+  </ItemGroup>
+</Project>

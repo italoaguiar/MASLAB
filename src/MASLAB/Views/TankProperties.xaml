@@ -1,0 +1,47 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Editor="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MASLAB.Views.TankProperties"
+        Title="Propriedades do Tanque" 
+        WindowStartupLocation="CenterOwner">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+
+    <StackPanel Orientation="Horizontal">
+      
+      <Button Command="{Binding UndoCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Background="Transparent" BorderBrush="Transparent" Width="30" ToolTip.Tip="Desfazer">
+        <Path Width="16" Height="16" Stretch="Fill" Fill="#FF0096FE" Data="F1 M 3.85013,1.63472C 4.565,2.4575 3.83785,3.39026 2.53229,4.52121L 2.18394,4.15818C 3.23656,3.05251 3.83,2.6025 3.41431,2.06159C 3.07334,1.70625 2.5154,1.79901 2.03582,2.16269L 2.47184,2.6202L 0.823143,3.01974L 1.30148,1.39216L 1.60729,1.71304C 2.35413,1.12864 3.31882,1.08103 3.85013,1.63472 Z "/>
+      </Button>
+      <Button Command="{Binding RedoCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}" Background="Transparent" BorderBrush="Transparent" Width="30" ToolTip.Tip="Refazer">
+        <Path Width="16" Height="16" Stretch="Fill" Fill="#FF0096FE" Data="F1 M 1.53801,1.63472C 0.823142,2.4575 1.55029,3.39026 2.85585,4.52121L 3.2042,4.15818C 2.15158,3.05251 1.55814,2.6025 1.97383,2.06159C 2.31481,1.70625 2.87274,1.79901 3.35233,2.16269L 2.9163,2.6202L 4.565,3.01974L 4.08666,1.39216L 3.78085,1.71304C 3.03401,1.12864 2.06932,1.08103 1.53801,1.63472 Z "/>
+      </Button><!--
+      <Line StartPoint="0,0" EndPoint="0,1" VerticalAlignment="Stretch" Stretch="Fill" Stroke="#F0F0F0" StrokeThickness="1" Margin="5"/>
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30">
+        <Image Source="/Assets/Save.png"/>
+      </Button>
+      <Button Background="Transparent" BorderBrush="Transparent" Width="30">
+        <Image Source="/Assets/printer-icon.png"/>
+      </Button>-->
+    </StackPanel>
+
+    <Editor:TextEditor Name="Editor" Grid.Row="1"/>
+    
+    
+    <Border Grid.Row="2" Grid.ColumnSpan="2" Background="#2B579A" BorderBrush="#1f4073" BorderThickness="0,.7,0,0" Height="30">
+      <Slider Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15,0"/>
+    </Border>
+
+   
+  </Grid>
+  
+  
+</Window>

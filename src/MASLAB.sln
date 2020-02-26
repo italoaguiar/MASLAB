@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASLAB", "MASLAB\MASLAB.csproj", "{179A8605-68DA-4AE8-B2BD-B8C4DD416DA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxyPlot.Avalonia", "OxyPlot.Avalonia\OxyPlot.Avalonia.csproj", "{72EE6533-49F5-4170-96E7-CA63FCE7AB9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{179A8605-68DA-4AE8-B2BD-B8C4DD416DA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{179A8605-68DA-4AE8-B2BD-B8C4DD416DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{179A8605-68DA-4AE8-B2BD-B8C4DD416DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{179A8605-68DA-4AE8-B2BD-B8C4DD416DA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72EE6533-49F5-4170-96E7-CA63FCE7AB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72EE6533-49F5-4170-96E7-CA63FCE7AB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72EE6533-49F5-4170-96E7-CA63FCE7AB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72EE6533-49F5-4170-96E7-CA63FCE7AB9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92AC6E82-199F-448E-BD2F-C83ABDF71217}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,58 @@
+﻿using System;
+using Simulation;
+
+/// <summary>
+/// Classe de simulação do Tanque
+/// </summary>
+public class Tank : SimulationTank
+{
+	///<summary>
+	/// Método chamado antes do início da simulação
+	/// Utilize-o para inicializar variáveis
+	///</summary>
+	public override void OnSimulationStarting()
+	{
+		Level = 50;                   // altura inicial do tanque
+		ValveConstant = 0.5;   // constante da válvula de saída
+		TankArea = 1;              // área da base do tanque
+	}
+	
+	/// <summary>
+	/// Método de atualização do estado do tanque para cada intervalo de tempo
+	/// </summary>
+	/// <param name="tempo">Instante atual de tempo</param>
+	/// <param name="simulationStep">Intervalo de tempo</param>
+	/// <param name="entrada1">Entrada 1 do tanque</param>
+	/// <param name="entrada2">Entrada 2 do tanque</param>
+	/// <returns>Saída do tanque</returns>
+	public override SimulationData OnUpdate(TimeSpan tempo, TimeSpan simulationStep, double entrada1, double entrada2)
+	{
+		double output = 0;
+		double level = RungeKutta4(Level, tempo.TotalSeconds, tempo.TotalSeconds + simulationStep.TotalSeconds, 
+			(t, x) =>
+			{
+				double qs = ValveConstant * Math.Sqrt(x);                    // vazão de saída
+				double xd = (entrada1 + entrada2 - qs) / TankArea;     // (vazão de entrada - vazão de saída) / área da base
+
+				if (x < 0)
+					return 0;
+
+				output = qs;
+				return xd;
+			}
+		);
+
+		//Plot("Tanque X", tempo, Level); //plota o nivel do tanque
+
+		return new SimulationData(level,output);
+	}
+	
+	
+	
+	
+	// Você pode adicionar novos métodos aqui se precisar, ex:
+	// public int SomaValores(int val1, int val2)
+	// {
+	//       return val1 + val2;
+	// }
+}
