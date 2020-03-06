@@ -13,6 +13,10 @@ using Avalonia.Media.Imaging;
 using System.IO;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using OxyPlot.Series;
+using MathNet.Numerics.Data.Matlab;
+using MathNet.Numerics.Data.Text;
+using System.Globalization;
 
 namespace MASLAB.ViewModels
 {
@@ -59,7 +63,7 @@ namespace MASLAB.ViewModels
             //configura o comando de salvamento do projeto
             SaveCommand = new CommandAdapter(true)
             {
-                Action = async (p) => Save()
+                Action = (p) => Save()
             };
 
             //configura o comando de partida do simulador
@@ -329,23 +333,14 @@ namespace MASLAB.ViewModels
                     Extensions = new List<string> { "masl" },
                     Name = "Projeto do MASLAB"
                 });
+                
 
                 //abre a janela do diálogo
                 var r = await sfd.ShowAsync(App.MainWindow);
 
                 if (!string.IsNullOrEmpty(r))
                 {
-                    using (StreamWriter sw = new StreamWriter(r))
-                    {
-                        //converte o objeto do projeto para o formato json
-                        string t = JsonConvert.SerializeObject(Project, new JsonSerializerSettings()
-                        {
-                            //preserva as referencias circulares do objeto
-                            PreserveReferencesHandling = PreserveReferencesHandling.All
-                        });
-                        //escreve o json no arquivo
-                        sw.Write(t);
-                    }
+                    SaveProjectFile(r);
                 }
             }
             catch (Exception e)
@@ -353,6 +348,29 @@ namespace MASLAB.ViewModels
                 await Views.MessageBox.Show(e.Message, "Error");
             }
         }
+
+
+        /// <summary>
+        /// Salva um arquivo do projeto desenvolvido
+        /// </summary>
+        /// <param name="filename">Caminho para o arquivo</param>
+        private void SaveProjectFile(string filename)
+        {
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                //converte o objeto do projeto para o formato json
+                string t = JsonConvert.SerializeObject(Project, new JsonSerializerSettings()
+                {
+                    //preserva as referencias circulares do objeto
+                    PreserveReferencesHandling = PreserveReferencesHandling.All
+                });
+                //escreve o json no arquivo
+                sw.Write(t);
+            }
+        }
+
+
+        
 
 
         /// <summary>
@@ -442,27 +460,132 @@ namespace MASLAB.ViewModels
             try
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filters.Add(new FileDialogFilter { Name = "PNG (*.png)", Extensions = new List<string> { ".png" } });
+                saveFileDialog1.Filters.Add(new FileDialogFilter { Name = "Imagem PNG (*.png)", Extensions = new List<string> { ".png" } });
                 
+                saveFileDialog1.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo .mat
+                {
+                    Extensions = new List<string> { "mat" },
+                    Name = "Dados do gráfico para matriz do Matlab"
+                });
+                saveFileDialog1.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo .csv
+                {
+                    Extensions = new List<string> { "csv" },
+                    Name = "Dados do grafico para arquivo CSV"
+                });
+
                 saveFileDialog1.Title = "Salvar uma imagem";
                 var r = await saveFileDialog1.ShowAsync(App.MainWindow);
 
-                var target = control as TabControl;
-                var pixelSize = new PixelSize((int)target.Bounds.Width, (int)target.Bounds.Height);
-                var size = new Size(target.Bounds.Width, target.Bounds.Height);
-                var dpiVector = new Vector(96, 96);
-                using (var renderBitmap = new RenderTargetBitmap(pixelSize, dpiVector))
+                if (!string.IsNullOrEmpty(r))
                 {
-                    target.Measure(size);
-                    target.Arrange(new Rect(size));
-                    renderBitmap.Render(target);
-                    renderBitmap.Save(r);
+                    switch (Path.GetExtension(r).ToLower())
+                    {
+                        case ".png":
+                            ExportPng(control, r);
+                            break;
+                        case ".mat":
+                            ExportMatFile(r);
+                            break;
+                        case ".csv":
+                            ExportCsvFile(r);
+                            break;
+                    }
                 }
+                
             }
-            catch
+            catch (Exception e)
             {
+                await Views.MessageBox.Show(e.Message, "Error");
+            }
+        }
 
+        /// <summary>
+        /// Exporta um arquivo de imagem para o controle informado
+        /// </summary>
+        /// <param name="control">Controle a ser renderizado</param>
+        /// <param name="filename">Caminho para o arquivo</param>
+        private void ExportPng(object control, string filename)
+        {
+            var target = control as TabControl;
+            var pixelSize = new PixelSize((int)target.Bounds.Width, (int)target.Bounds.Height);
+            var size = new Size(target.Bounds.Width, target.Bounds.Height);
+            var dpiVector = new Vector(96, 96);
+            using (var renderBitmap = new RenderTargetBitmap(pixelSize, dpiVector))
+            {
+                target.Measure(size);
+                target.Arrange(new Rect(size));
+                renderBitmap.Render(target);
+                renderBitmap.Save(filename);
+            }
+        }
+
+
+        /// <summary>
+        /// Salva um arquivo com os dados do gráfico no formato
+        /// do matlab
+        /// </summary>
+        /// <param name="filename">Caminho para o arquivo</param>
+        private void ExportMatFile(string filename)
+        {
+            if (ChartService.Model != null)
+            {
+                var matrices = new List<MatlabMatrix>();
+
+                foreach (var serie in ChartService.Model.Series)
+                {
+                    var s = (LineSeries)serie;
+                    double[,] data = new double[s.Points.Count, 2];
+
+                    for (int i = 0; i < s.Points.Count; i++)
+                    {
+                        data[i, 0] = s.Points[i].X;
+                        data[i, 1] = s.Points[i].Y;
+                    }
+
+                    var m = MathNet.Numerics.LinearAlgebra.Matrix<double>.Build.DenseOfArray(data);
+
+                    matrices.Add(MatlabWriter.Pack(m, s.Title.Replace(" ", "_")));
+                }
+
+                MatlabWriter.Store(filename, matrices);
+            }
+        }
+
+        /// <summary>
+        /// Exporta o conjunto de dados do gráfico para o formato csv
+        /// </summary>
+        /// <param name="filename">Caminho para o arquivo</param>
+        private void ExportCsvFile(string filename)
+        {
+            if (ChartService.Model != null)
+            {
+                var matrices = new List<MatlabMatrix>();
+
+                var max = ChartService.Model.Series
+                    .Cast<LineSeries>()
+                    .Max(x => x.Points.Count);
+
+                double[,] data = new double[max, ChartService.Model.Series.Count * 2];
+                string[] labels = new string[ChartService.Model.Series.Count * 2];
+                for (int i = 0; i < ChartService.Model.Series.Count * 2; i = i + 2)
+                {
+                    LineSeries serie = (LineSeries)ChartService.Model.Series[i/2];
+                    for (int j = 0; j < serie.Points.Count; j++)
+                    {
+                        data[j, i] = serie.Points[j].X;
+                        data[j, i + 1] = serie.Points[j].Y;
+                    }
+                    labels[i] = serie.Title.Replace(",", "").Replace(" ", "_").Trim() + "_X";
+                    labels[i + 1] = serie.Title.Replace(",", "").Replace(" ", "_").Trim() + "_Y";
+                }
+
+                var m = MathNet.Numerics.LinearAlgebra.Matrix<double>.Build.DenseOfArray(data);
+                using (StreamWriter sw = new StreamWriter(filename))
+                {
+                    DelimitedWriter.Write<double>(sw, m, ",", labels, formatProvider: CultureInfo.InvariantCulture.NumberFormat);
+                }
             }
         }
     }
 }
+
