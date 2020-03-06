@@ -31,43 +31,23 @@ MASLAB inclui alguns métodos embutidos no código de simulação de cada tanque
 
 # Plataformas Suportadas
 
-MASLAB foi escrito em C# e XAML utilizando o [.net Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/current/runtime) e o framework gráfico [Avalonia UI](https://avaloniaui.net/).  Atualmente o .net Core 3.1 e Avalonia possuem suporte para Windows, Linux e MacOS.
+MASLAB está diponível para o Windows, Linux e macOS.
 
 # Instalação
-[![link](https://1.bp.blogspot.com/-dKrfiTIL1V0/XlamZipMrtI/AAAAAAAACiQ/o2npxeDg0mgT4yk9yGdHCwrBOpEJI9b0gCLcBGAsYHQ/s1600/download.png)](https://github.com/italoaguiar/MASLAB/raw/master/bin/source.zip) 
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.2/total?color=%235b8dde&label=Windows%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.2/win-x64.zip)
 
-Você pode fazer o download do software clicando no botão acima ou clicando [aqui](https://github.com/italoaguiar/MASLAB/raw/master/bin/source.zip). Após o download, você pode descompactar o arquivo para uma pasta de sua preferência.
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.2/total?color=%237ad128&label=macOS%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.2/osx-x64.zip)
 
-Para executar o software, o único requisito inicial é ter o **.net Core 3.1 runtime** instalado no computador. Você pode fazer a instalação seguindo as intruções nos links abaixo:
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.2/total?label=Linux%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.2/linux-x64.zip) 
 
-**Windows**: ([x64](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.2-windows-x64-installer)) | ([x86](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.2-windows-x86-installer)) Installer
-
-**MacOS**: [(x64) Installer](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-3.1.2-macos-x64-installer)
-
-**Linux:** Abra um terminal e execute os seguintes comandos:
-*O Comando abaixo refere-se ao Ubuntu 19.04, para outras versões, [siga este link](https://docs.microsoft.com/pt-br/dotnet/core/install/linux-package-manager-fedora31).*
-
-    wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb sudo dpkg -i packages-microsoft-prod.deb
-
-Em seguida execute:
-
-    sudo apt-get update 
-    sudo apt-get install apt-transport-https 
-    sudo apt-get update 
-    sudo apt-get install dotnet-runtime-3.1
-
-
+Basta fazer o download da versão adequada ao seu sistema operacional e descompactar o arquivo para uma pasta.
 
 ## Executando o software
-***Atenção!** Antes de executar o software, certifique-se de que a instalação do .net Core 3.1 runtime foi efetuada.*
 
 **Windows**:  Para executar o software no ambiente Windows, basta abrir a pasta em que o software foi descompactado e executar o arquivo **MASLAB.exe**.
 
-**Linux e MacOS**: Após descompactar o software para alguma pasta do computador, inicie um terminal dentro da pasta do software. Execute o seguinte comando:
+**Linux e MacOS**: Após descompactar o software para alguma pasta do computador, execute o o arquivo **MASLAB**. Pode ser necessário conceder alguma permissão ao software.
 
-    $ dotnet MASLAB.dll
-
-Obs: Este comando também é válido para o ambiente Windows.
 
 # Sobre o software
 Desenvolvido por [Ítalo A. Aguiar](https://github.com/italoaguiar/)
