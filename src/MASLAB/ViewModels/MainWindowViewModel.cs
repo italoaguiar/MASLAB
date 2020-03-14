@@ -72,18 +72,46 @@ namespace MASLAB.ViewModels
                 Action = async (p) =>
                 {
                     //limpa os dados da plotagem atual
-                    ChartService.GetService().Clear();
-
-                    //percorre todos os tanques
-                    foreach (var l in Project.Levels)
-                        foreach (var t in l.Items)
+                    if (!Simulator.IsPaused)
+                    {
+                        try
                         {
-                            //compila o código de todos os tanques
-                            await t.Compile();
+                            ChartService.GetService().Clear();
+                            LogService.GetService().Clear();
+                            ErrorService.GetService().Clear();
 
-                            //chama o método de inicialização de cada tanque
-                            t.SimulationTank.OnSimulationStarting();
+                            //percorre todos os tanques                    
+                            foreach (var l in Project.Levels)
+                                foreach (var t in l.Items)
+                                {
+                                    //compila o código de todos os tanques
+                                    await t.Compile();
+
+                                    //chama o método de inicialização de cada tanque
+                                    t.SimulationTank.OnSimulationStarting();
+                                }
                         }
+                        catch (CompilationException ce)
+                        {
+                            ErrorService.GetService().AddRange(ce.Errors);
+
+                            Simulator.Stop();
+
+                            ShowErrorDialog("A simulação falhou ao iniciar. Por favor verifique a lista de erros");
+
+                            SelectedTabIndex = 3;
+
+                            return;
+                        }
+                        catch (Exception e)
+                        {
+                            Simulator.Stop();
+
+                            ShowErrorDialog("Ocorreu um erro desconhecido ao iniciar a simulação:\n" + e.Message);
+
+                            return;
+                        }
+                    }
 
                     //inicia a simulação
                     Simulator.Start();
@@ -148,6 +176,28 @@ namespace MASLAB.ViewModels
                 }
             };
 
+
+            RefreshChartCommand = new CommandAdapter(true)
+            {
+                Action = (p) => ((OxyPlot.Avalonia.PlotView)p).ResetAllAxes()
+            };
+
+            
+            ChartZoomInCommand = new CommandAdapter(true)
+            {
+                Action = (p) => ((OxyPlot.Avalonia.PlotView)p).ZoomAllAxes(1.1)
+            };
+
+            ChartZoomOutCommand = new CommandAdapter(true)
+            {
+                Action = (p) => ((OxyPlot.Avalonia.PlotView)p).ZoomAllAxes(0.9)
+            };
+
+            AboutCommand = new CommandAdapter(true)
+            {
+                Action = (p) => IsAboutOpen = true
+            };
+
             CheckCommandLine();
 
         }
@@ -163,9 +213,16 @@ namespace MASLAB.ViewModels
             }
         }
 
+        private async void ShowErrorDialog(string message)
+        {
+            await MASLAB.Views.MessageBox.Show(message, "Erro");
+        }
+
         bool linkEnabled;
         IList<Point> pointCollection = new List<Point>();
         Project project;
+        bool about;
+        int selectedTabIndex = 0;
 
         public string Greeting => "Welcome to Avalonia!";
 
@@ -245,6 +302,36 @@ namespace MASLAB.ViewModels
         /// </summary>
         public CommandAdapter SimulationSettingsCommand { get; private set; }
 
+
+        /// <summary>
+        /// Obtém o comando para redefinir os eixos do gráfico
+        /// </summary>
+        public CommandAdapter RefreshChartCommand { get; private set; }
+
+
+        /// <summary>
+        /// Obtém o comando para aplicar zoom ao gráfico
+        /// </summary>
+        public CommandAdapter ChartZoomInCommand { get; private set; }
+
+
+        /// <summary>
+        /// obtém o comando para remover o zoom do gráfico
+        /// </summary>
+        public CommandAdapter ChartZoomOutCommand { get; private set; }
+
+        /// <summary>
+        /// Obtém o comando para abrir o sobre o software
+        /// </summary>
+        public CommandAdapter AboutCommand { get; private set; }
+
+
+        public bool IsAboutOpen
+        {
+            get => about;
+            set => this.RaiseAndSetIfChanged(ref about, value);
+        }
+
         /// <summary>
         /// Determina se a adição de novas conexões está habilitado
         /// </summary>
@@ -262,6 +349,15 @@ namespace MASLAB.ViewModels
         { 
             get => pointCollection; 
             set => pointCollection = this.RaiseAndSetIfChanged(ref pointCollection, value); 
+        }
+
+        /// <summary>
+        /// Obtém ou define o índice da aba selecionada
+        /// </summary>
+        public int SelectedTabIndex 
+        { 
+            get => selectedTabIndex;
+            set => this.RaiseAndSetIfChanged(ref selectedTabIndex, value);
         }
 
         /// <summary>
@@ -333,7 +429,7 @@ namespace MASLAB.ViewModels
                     Extensions = new List<string> { "masl" },
                     Name = "Projeto do MASLAB"
                 });
-                
+                sfd.DefaultExtension = "masl";
 
                 //abre a janela do diálogo
                 var r = await sfd.ShowAsync(App.MainWindow);
@@ -380,28 +476,37 @@ namespace MASLAB.ViewModels
         /// <param name="e">Parâmetros do simulador</param>
         private void OnSimulationTick(object sender, SimulationTickEventArgs e)
         {
-            //obtém os tanques de todos os níveis
-            foreach (var t in Project.Levels.SelectMany(x=> x.Items))
+            try
             {
-                //obtém as conexões de cada tanque
-                var r = Project.Connections.Where(x => x.Target.Tank == t).ToArray();
-                switch (r.Length)
+                //obtém os tanques de todos os níveis
+                foreach (var t in Project.Levels.SelectMany(x => x.Items))
                 {
-                    //o tanque tem duas conexões de entrada
-                    case 2:
-                        t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, r[0].Origin.Tank.Output, r[1].Origin.Tank.Output);
-                        break;
+                    //obtém as conexões de cada tanque
+                    var r = Project.Connections.Where(x => x.Target.Tank == t).ToArray();
+                    switch (r.Length)
+                    {
+                        //o tanque tem duas conexões de entrada
+                        case 2:
+                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, r[0].Origin.Tank.Output, r[1].Origin.Tank.Output);
+                            break;
 
-                    //o tanque tem uma conexão de entrada
-                    case 1:
-                        t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, r[0].Origin.Tank.Output, 0);
-                        break;
+                        //o tanque tem uma conexão de entrada
+                        case 1:
+                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, r[0].Origin.Tank.Output, 0);
+                            break;
 
-                    //o tanque não possui conexões de entrada
-                    case 0:
-                        t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, 0, 0);
-                        break;
+                        //o tanque não possui conexões de entrada
+                        case 0:
+                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, 0, 0);
+                            break;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                LogService.GetService().Log("!! FALHA: " + ex.Message);
+
+                SelectedTabIndex = 2;
             }
         }
 
@@ -426,6 +531,7 @@ namespace MASLAB.ViewModels
             PointCollection.Add(c.Position);
             PointCollection.Add(new Point(c.Position.X + 10, c.Position.Y));
             PointCollection.Add(new Point(c.Position.X + 10, c.Position.Y));
+            PointCollection.Add(new Point(c.Position.X + 10, c.Position.Y));
 
             PointCollection = new List<Point>(pointCollection);
 
@@ -438,6 +544,13 @@ namespace MASLAB.ViewModels
         /// <param name="l">Dados da conexão entre dois tanques</param>
         private void OnConnectionCompleted(Link l)
         {
+            if(l == null)
+            {
+                LinkEnabled = false;
+                PointCollection = new List<Point>();
+                return;
+            }
+
             LinkEnabled = false;
 
             var last = PointCollection.Last();
@@ -460,7 +573,11 @@ namespace MASLAB.ViewModels
             try
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filters.Add(new FileDialogFilter { Name = "Imagem PNG (*.png)", Extensions = new List<string> { ".png" } });
+                saveFileDialog1.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo .png
+                { 
+                    Name = "Imagem PNG (*.png)", 
+                    Extensions = new List<string> { ".png" } 
+                });
                 
                 saveFileDialog1.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo .mat
                 {
@@ -472,8 +589,8 @@ namespace MASLAB.ViewModels
                     Extensions = new List<string> { "csv" },
                     Name = "Dados do grafico para arquivo CSV"
                 });
-
-                saveFileDialog1.Title = "Salvar uma imagem";
+                saveFileDialog1.InitialFileName = "imagem.png";
+                saveFileDialog1.Title = "Exportar...";
                 var r = await saveFileDialog1.ShowAsync(App.MainWindow);
 
                 if (!string.IsNullOrEmpty(r))

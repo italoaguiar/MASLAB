@@ -33,17 +33,19 @@ public class Tank : SimulationTank
 			{
 				double qs = ValveConstant * Math.Sqrt(x);                    // vazão de saída
 				double xd = (entrada1 + entrada2 - qs) / TankArea;     // (vazão de entrada - vazão de saída) / área da base
-
+				
 				if (x < 0)
 					return 0;
-
+				
 				output = qs;
 				return xd;
 			}
 		);
-
+		
 		//Plot("Tanque X", tempo, Level); //plota o nivel do tanque
-
+		//Log(tempo, output); //imprime a vazão na aba de log da simulação
+		//Log("Exemplo de texto impresso na aba log");
+		
 		return new SimulationData(level,output);
 	}
 	

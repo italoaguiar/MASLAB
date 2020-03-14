@@ -70,15 +70,36 @@ namespace Simulation
             return RungeKutta.SecondOrder(y0, start, end, 10, dydx)[9];
         }
 
+        /// <summary>
+        /// Plota um ponto no gráfico para a série definida
+        /// </summary>
+        /// <param name="serie">Nome da série</param>
+        /// <param name="time">Instante de tempo da série</param>
+        /// <param name="value">Valor a ser plotado</param>
         public void Plot(string serie, TimeSpan time, double value)
         {
             ChartService.GetService().Plot(serie, time, value);
         }
-    }
 
-    // Finds value of y for a given x using step size h 
-    // and initial value y0 at x0. 
-    
+        /// <summary>
+        /// Insere uma nova linha no log da simulação
+        /// </summary>
+        /// <param name="value">valor a ser inserido</param>
+        public void Log(string value)
+        {
+            LogService.GetService().Log(value);
+        }
+
+
+        /// <summary>
+        /// Insere uma nova linha no log da simulação
+        /// </summary>
+        /// <param name="value">valor a ser inserido</param>
+        public void Log(TimeSpan time, object value)
+        {
+            Log(time.ToString(@"mm\:ss\.fff") + "   |   " + value.ToString());
+        }
+    }    
 }
 
 //using Simulation;

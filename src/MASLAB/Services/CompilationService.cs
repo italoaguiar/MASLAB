@@ -86,4 +86,17 @@ namespace MASLAB.Services
 
         public ImmutableArray<Diagnostic> Errors { get; private set; }
     }
+
+    public class CompilationDiagnostic
+    {
+        public CompilationDiagnostic(Diagnostic diagnostic)
+        {
+            Diagnostic = diagnostic;
+        }
+
+        public Diagnostic Diagnostic { get; private set; }
+
+        public int Line { get; set; }
+        public int Column { get; set; }
+    }
 }

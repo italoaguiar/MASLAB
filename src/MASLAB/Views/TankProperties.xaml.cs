@@ -47,6 +47,7 @@ namespace MASLAB.Views
             _editor.TextArea.TextEntered += textEditor_TextArea_TextEntered;
             _editor.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             _editor.TextArea.TextInput += TextArea_TextInput;
+            _editor.TextArea.Initialized += (s,a) => AnalyzeCodeSyntax();
             _editor.KeyUp += TextArea_KeyUp;
             _editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 
@@ -72,6 +73,9 @@ namespace MASLAB.Views
                 if (i.Delta.Y > 0) _editor.FontSize++;
                 else _editor.FontSize = _editor.FontSize > 1 ? _editor.FontSize - 1 : 1;
             }, RoutingStrategies.Bubble, true);
+
+
+            
 
             UndoCommand = new CommandAdapter(true) { Action = (p) => _editor.Undo() };
             RedoCommand = new CommandAdapter(true) { Action = (p) => _editor.Redo() };
@@ -114,11 +118,16 @@ namespace MASLAB.Views
 
         private TextEditor _editor;
         private CompletionWindow _completionWindow;
-        private OverloadInsightWindow _insightWindow;
         private FoldingManager foldingManager;
         private BraceFoldingStrategy foldingStretegy;
         private ITextMarkerService textMarkerService;
+
+#pragma warning disable IDE0044 // Adicionar modificador somente leitura
+        private OverloadInsightWindow _insightWindow;
         private ToolTip toolTip;
+#pragma warning restore IDE0044 // Adicionar modificador somente leitura
+        
+        
 
 
         MASL.Controls.DataModel.Tank tank;
@@ -153,7 +162,22 @@ namespace MASLAB.Views
             {
                 foldingStretegy.UpdateFoldings(foldingManager, _editor.Document);
 
+                var errorService = ErrorService.GetService();
+                errorService.Clear();
+
+                
                 var d = await CodeAnalysisService.LoadDocument(_editor.Document.Text).GetDiagnosticsAsync();
+
+                var s = d.Select(x =>
+                {
+                    var cd = new CompilationDiagnostic(x);
+                    var line = _editor.Document.GetLineByOffset(x.Location.SourceSpan.Start);
+                    cd.Line = line.LineNumber;
+                    cd.Column = line.Length;
+                    return cd;
+                });
+
+                errorService.AddRange(s);
 
                 textMarkerService.RemoveAll(m => true);
 

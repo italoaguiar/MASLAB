@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using MASLAB.Services;
 using MASLAB.ViewModels;
 using MASLAB.Views;
 using OxyPlot.Avalonia;
@@ -15,6 +16,9 @@ namespace MASLAB
             AvaloniaXamlLoader.Load(this);
             OxyPlotModule.EnsureLoaded();
             OxyPlotModule.Initialize();
+
+            //inicializa os serviços de código
+            CodeAnalysisService.LoadDocument("");
         }
 
         public static Window MainWindow { get; set; }

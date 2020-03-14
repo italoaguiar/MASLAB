@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition.Hosting;
 using System.IO;
 using System.Runtime;
@@ -150,7 +151,7 @@ namespace MASLAB.Services
 
 
 
-        public Task<List<Diagnostic>> GetDiagnosticsAsync()
+        public Task<ImmutableArray<Diagnostic>> GetDiagnosticsAsync()
         {
             return Task.Run(() =>
             {
@@ -161,7 +162,7 @@ namespace MASLAB.Services
                     DefaultReferences,
                     options:new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-                return new List<Diagnostic>(compilation.GetDiagnostics());
+                return compilation.GetDiagnostics();
             });            
         }
 

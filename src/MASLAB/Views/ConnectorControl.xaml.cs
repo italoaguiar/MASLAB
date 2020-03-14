@@ -71,8 +71,10 @@ namespace MASLAB.Views
                 var x = (int)(Math.Round(p.X + 7) / 15) * 15;
                 var y = (int)(Math.Round(p.Y + 7) / 15) * 15;
 
+                var point = new Point(x, y);
+                var lp = Points[Points.Count - 3];
 
-                Points.Add(new Point(x, y));
+                Points.Add(point);
 
                 Points = new List<Point>(Points);
             }           
@@ -86,8 +88,8 @@ namespace MASLAB.Views
 
             if (IsLinkEnabled && Points.Count > 1)
             {
-                var point = Points[Points.Count -1];
-                var lp = Points[Points.Count - 2];
+                var point = Points[Points.Count -2];
+                var lp = Points[Points.Count - 3];
 
                 var p = e.GetPosition(this);
 
@@ -104,7 +106,8 @@ namespace MASLAB.Views
                     point = new Point(lp.X, y);
                 }
 
-                Points[Points.Count - 1] = point;
+                Points[Points.Count - 1] = new Point(p.X > lp.X ? Math.Max(point.X, lp.X + 10) : Math.Min(point.X, lp.X - 10), point.Y);
+                Points[Points.Count - 2] = point;
 
                 Points = new List<Point>(Points);
             }

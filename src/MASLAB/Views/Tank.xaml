@@ -9,17 +9,17 @@
     <vm:TankViewModel/>
   </Design.DataContext>
   <Canvas>
-    <Border Canvas.Left="15" Width="105" Height="105" BorderBrush="Black" BorderThickness="1,0,1,1">
+    <Border Canvas.Left="15" Width="105" Height="105" BorderBrush="Black" BorderThickness="1,0,1,1" Background="Transparent">
       <Rectangle Height="{Binding TankData.TankLevel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Fill="CornflowerBlue" VerticalAlignment="Bottom"/>
     </Border>
 
-    <Button Background="#08454545" ZIndex="1000" Canvas.Top="15" Canvas.Left="7" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+    <Button Background="#08454545" ZIndex="1000" Canvas.Top="13" Canvas.Left="9" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
       <Button.Styles>
         <Style Selector="Button">
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="Button">
-                <Border x:Name="border1" Width="10" Height="10" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                <Border x:Name="border1" Width="12" Height="14" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
                 </Border>
               </ControlTemplate>
             </Setter.Value>
@@ -35,13 +35,13 @@
       </Button.Styles>
     </Button>
 
-    <Button Background="#08454545" Canvas.Top="15" ZIndex="1000" Canvas.Left="117" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+    <Button Background="#08454545" Canvas.Top="13" ZIndex="1000" Canvas.Left="115" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
       <Button.Styles>
         <Style Selector="Button">
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="Button">
-                <Border x:Name="border" Width="10" Height="10" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                <Border x:Name="border" Width="12" Height="14" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
                 </Border>
               </ControlTemplate>
             </Setter.Value>

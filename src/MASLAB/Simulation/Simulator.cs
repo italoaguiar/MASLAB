@@ -154,7 +154,7 @@ namespace Simulation
             IsStoped = true;
             IsPaused = false;
 
-            _tokenSource.Cancel();
+            _tokenSource?.Cancel();
             SimulationTime = TimeSpan.Zero;
         }
 

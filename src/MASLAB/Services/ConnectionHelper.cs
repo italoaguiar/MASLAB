@@ -55,6 +55,7 @@ namespace MASLAB.Services
         public static void Cancel()
         {
             Clear();
+            OnConnectionRequested(null);
         }
 
         private static void OnConnectionRequested(Link l)

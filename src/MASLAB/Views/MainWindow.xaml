@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+        xmlns:c="clr-namespace:MASLAB.Converters;assembly=MASLAB"
         xmlns:dc="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
         xmlns:e="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
         xmlns:m="clr-namespace:MASLAB.Views;assembly=MASLAB"
@@ -11,8 +12,13 @@
         xmlns:dt="clr-namespace:MASLAB.Services;assembly=MASLAB"
         x:Class="MASLAB.Views.MainWindow"
         WindowState="Maximized"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon.ico"
         Title="MASLAB - UNIVERSIDADE FEDERAL DE OURO PRETO" x:Name="mw">
+
+  <Window.Resources>
+    <c:SeverityToBoolConverter x:Key="isErrorConverter" CheckError="True"/>
+    <c:SeverityToBoolConverter x:Key="isWarningConverter" CheckWarning="True"/>
+  </Window.Resources>
 
   <Window.Styles>
 
@@ -135,7 +141,7 @@
         </MenuItem>        
       </MenuItem>
       <MenuItem Header="_Ajuda">
-        <MenuItem Header="_Sobre o Software" Foreground="Black">
+        <MenuItem Header="_Sobre o Software" Foreground="Black" Command="{Binding AboutCommand}">
           <MenuItem.Icon>
             <Image Source="/Assets/info-icon.png"/>
           </MenuItem.Icon>
@@ -167,10 +173,10 @@
     </StackPanel>
     
     <Grid Grid.Row="2">      
-      <TabControl Name="tabControl">
+      <TabControl Name="tabControl" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
         <TabItem Header="Diagrama">
           <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible">
-            <StackPanel>
+            <StackPanel >
               <StackPanel.Background>
                 <VisualBrush TileMode="Tile"
                     SourceRect="0,0,75,75"
@@ -192,11 +198,11 @@
                   </VisualBrush.Visual>
                 </VisualBrush>
               </StackPanel.Background>
-              <Grid Margin="10,10,0,0">
+              <Grid Margin="10,10,0,0" IsEnabled="{Binding !Simulator.IsRunning}">
                 <Canvas Name="go">
                   
                 </Canvas>
-                <ItemsControl  Items="{Binding Project.Levels}">
+                <ItemsControl  Items="{Binding Project.Levels}" IsEnabled="{Binding !Simulator.IsPaused}">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate>
                       <Border Height="164.5" Margin="0,0,0,15">
@@ -242,13 +248,7 @@
                                             <MenuItem.Icon>
                                               <Image Source="/Assets/remove-icon.png"/>
                                             </MenuItem.Icon>
-                                          </MenuItem>
-                                          <MenuItem Header="Redefinir Configurações">
-                                            <MenuItem.Icon>
-                                              <Image Source="/Assets/clear-icon.png"/>
-                                            </MenuItem.Icon>
-                                          </MenuItem>
-                                          <Separator/>
+                                          </MenuItem>  
                                           <MenuItem Header="Propriedades" Command="{Binding $parent[Window].DataContext.ShowTankPropertiesCommand}" CommandParameter="{Binding}">
                                             <MenuItem.Icon>
                                               <Image Source="/Assets/tools-icon.png"/>
@@ -315,12 +315,12 @@
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <m:ConnectorControl IsLinkEnabled="{Binding LinkEnabled}" ParentWindow="{Binding , ElementName=mw}" Points="{Binding PointCollection, Mode=TwoWay}"/>
+                <m:ConnectorControl IsEnabled="{Binding !Simulator.IsPaused}" IsLinkEnabled="{Binding LinkEnabled}" ParentWindow="{Binding , ElementName=mw}" Points="{Binding PointCollection, Mode=TwoWay}"/>
               
               </Grid>
 
               <!--Add Level Button-->
-              <Button Background="#33B6DB4F" BorderBrush="#337D9931" Command="{Binding AddLevelCommand}" ToolTip.Tip="Adicionar um novo nível">
+              <Button IsEnabled="{Binding !Simulator.IsPaused}" Background="#33B6DB4F" BorderBrush="#337D9931" Command="{Binding AddLevelCommand}" ToolTip.Tip="Adicionar um novo nível">
                 <Button.Styles>
                   <Style Selector="Button">
                     <Setter Property="Template">
@@ -346,7 +346,55 @@
           </ScrollViewer>
         </TabItem>
         <TabItem Header="Gráficos">
-          <plot:PlotView Model="{Binding ., Source={x:Static dt:ChartService.Model}}"/>
+          <Grid RowDefinitions="*,Auto" Background="White">            
+            <plot:PlotView x:Name="plot" Model="{Binding ., Source={x:Static dt:ChartService.Model}}" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+              <Button Command="{Binding RefreshChartCommand}" CommandParameter="{Binding ElementName=plot}" Margin="5">Redefinir Gráfico</Button>
+              <Button Command="{Binding ChartZoomInCommand}" CommandParameter="{Binding ElementName=plot}" Margin="5">Zoom ( + ) </Button>
+              <Button Command="{Binding ChartZoomOutCommand}" CommandParameter="{Binding ElementName=plot}" Margin="5">Zoom ( - ) </Button>
+              <TextBlock Foreground="LightGray" VerticalAlignment="Center" Margin="5" FontSize="9">Dica: Clique no gráfico e utilize as setas do teclado para navegar</TextBlock>
+            </StackPanel>
+          </Grid>
+        </TabItem>
+        <TabItem Header="Logs">
+          <TextBox Text="{Binding Log, Source={x:Static dt:LogService.Data}}" AcceptsReturn="True" NewLine="&#x0a;" Background="Transparent" BorderThickness="0" CaretIndex="{Binding Log.Length, Source={x:Static dt:LogService.Data}}"/>
+        </TabItem>
+        <TabItem Header="Erros">
+          <Grid RowDefinitions="30,*">
+            <Grid ColumnDefinitions="30,100,50,50,*" Margin="15,5">
+              <Border Grid.Column="0" BorderThickness="0,0,1,1" BorderBrush="#dedede">
+              </Border>
+              <Border Grid.Column="1" BorderThickness="0,0,1,1" BorderBrush="#dedede">
+                <TextBlock Text="Código"  FontWeight="SemiBold" TextAlignment="Center"/>
+              </Border>
+              <Border Grid.Column="2" BorderThickness="0,0,1,1" BorderBrush="#dedede">
+                <TextBlock Text="Linha"  FontWeight="SemiBold" TextAlignment="Center"/>
+              </Border>
+              <Border Grid.Column="3" BorderThickness="0,0,1,1" BorderBrush="#dedede">
+                <TextBlock Text="Coluna"  FontWeight="SemiBold" TextAlignment="Center"/>
+              </Border>
+              <Border Grid.Column="4" BorderThickness="0,0,0,1" BorderBrush="#dedede">
+                <TextBlock Text="Descrição"  FontWeight="SemiBold" Margin="30,0"/>
+              </Border>
+            </Grid>
+            <ListBox Grid.Row="1" Background="Transparent" BorderThickness="0" Items="{Binding ., Source={x:Static dt:ErrorService.Errors}}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="30,100,50,50,*" Margin="15,5">
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Center">
+                      <Image Source="/Assets/StatusCriticalError.png" IsVisible="{Binding Diagnostic.Severity, Converter={StaticResource isErrorConverter}}" Width="16" Height="16"/>
+                      <Image Source="/Assets/StatusWarning.png" IsVisible="{Binding Diagnostic.Severity, Converter={StaticResource isWarningConverter}}" Width="16" Height="16"/>                      
+                    </Grid>
+
+                    <TextBlock Text="{Binding Diagnostic.Id}" Grid.Column="1" TextAlignment="Center"/>
+                    <TextBlock Text="{Binding Line}" Grid.Column="2" TextAlignment="Center"/>
+                    <TextBlock Text="{Binding Column}" Grid.Column="3" TextAlignment="Center"/>
+                    <TextBlock Text="{Binding Diagnostic.Info}" Grid.Column="4"/>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </Grid>
         </TabItem>
       </TabControl>
     </Grid>
@@ -354,11 +402,17 @@
 
 
     <Border Grid.Row="3" Background="#2B579A" BorderBrush="#1f4073" BorderThickness="0,.7,0,0" Height="30">
-      <StackPanel x:Name="menu" Orientation="Horizontal" IsEnabled="False">        
+      <StackPanel x:Name="menu" Orientation="Horizontal" IsEnabled="False">                
+        <TextBlock Text="{Binding Simulator.SimulationTime}" Foreground="#F0F0F0" VerticalAlignment="Center" Margin="5,0"/>
         <Line StartPoint="0,0" EndPoint="0,1" VerticalAlignment="Stretch" Stretch="Fill" Stroke="#F0F0F0" StrokeThickness="1" Margin="5"/>
-        <TextBlock Text="{Binding Simulator.SimulationTime}" Foreground="#F0F0F0" VerticalAlignment="Center"/>
+        <TextBlock Text="Pausado! Pare a simulação para editar o projeto." IsVisible="{Binding Simulator.IsPaused}" Foreground="#F0F0F0" VerticalAlignment="Center" Margin="3,0"/>
       </StackPanel>
     </Border>
+    <Grid Name="pp" Width="800" Height="508" Grid.RowSpan="6">
+      <Popup Name="popup" IsOpen="{Binding IsAboutOpen, Mode=TwoWay}" Width="800" Height="508" StaysOpen="False" PlacementTarget="{Binding #pp}" PlacementMode="AnchorAndGravity">
+        <Image Source="/Assets/splashscreen.png"/>
+      </Popup>
+    </Grid>
   </Grid>
 
 </Window>
