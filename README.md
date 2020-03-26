@@ -34,19 +34,21 @@ MASLAB inclui alguns métodos embutidos no código de simulação de cada tanque
 MASLAB está diponível para o Windows, Linux e macOS.
 
 # Instalação
-[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.2/total?color=%235b8dde&label=Windows%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.2/win-x64.zip)
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.3/total?color=%235b8dde&label=Instalador%20Windows%200.0.0.3&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.3/win-x64.exe) [![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.3/total?color=%235b8dde&label=Pacote%20zip%20Windows%200.0.0.3&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.3/win-x64.zip)
 
-[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.2/total?color=%237ad128&label=macOS%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.2/osx-x64.zip)
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.3/total?color=%237ad128&label=Instalador%20macOS%200.0.0.3&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.3/osx-x64.pkg) [![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.3/total?color=%237ad128&label=Pacote%20zip%20macOS%200.0.0.3&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.3/osx-x64.zip)
 
-[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.2/total?label=Linux%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.2/linux-x64.zip) 
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.3/total?label=Pacote%20zip%20Linux%200.0.0.2&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.3/linux-x64.zip) 
 
-Basta fazer o download da versão adequada ao seu sistema operacional e descompactar o arquivo para uma pasta.
+Basta fazer o download da versão adequada ao seu sistema operacional e executar, ou descompactar o arquivo para uma pasta, caso opte pela versão zip.
 
 ## Executando o software
 
-**Windows**:  Para executar o software no ambiente Windows, basta abrir a pasta em que o software foi descompactado e executar o arquivo **MASLAB.exe**.
+**Windows**:  Caso opte pelo download do arquivo zip, para executar o software no ambiente Windows, basta abrir a pasta em que o software foi descompactado e executar o arquivo **MASLAB.exe**. Do contrário, ao executar o instalador, atalhos para o software serão criados no menu iniciar e na área de trabalho.
 
-**Linux e MacOS**: Após descompactar o software para alguma pasta do computador, execute o o arquivo **MASLAB**. Pode ser necessário conceder alguma permissão ao software.
+**MacOS**: Após a instalação usando o instalador, o aplicativo ficará disponível juntamente aos demais apps. Caso opte pelo download do arquivo zip, execute o arquivo **MASLAB** para abrir o aplicativo.
+
+**Linux**: Após descompactar o software para alguma pasta do computador, execute o o arquivo **MASLAB**. Pode ser necessário conceder alguma permissão ao software.
 
 
 # Sobre o software
