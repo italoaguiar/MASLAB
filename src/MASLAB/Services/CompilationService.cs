@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MASLAB.Services
 {
-    public class CompilationService
+    internal class CompilationService
     {
         private CompilationService() { }
 
@@ -77,7 +77,7 @@ namespace MASLAB.Services
         }
     }
 
-    public class CompilationException : Exception
+    internal class CompilationException : Exception
     {
         public CompilationException(ImmutableArray<Diagnostic> Errors) : base("Compilation Failed")
         {
@@ -87,7 +87,7 @@ namespace MASLAB.Services
         public ImmutableArray<Diagnostic> Errors { get; private set; }
     }
 
-    public class CompilationDiagnostic
+    internal class CompilationDiagnostic
     {
         public CompilationDiagnostic(Diagnostic diagnostic)
         {

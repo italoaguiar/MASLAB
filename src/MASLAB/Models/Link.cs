@@ -43,6 +43,9 @@ namespace MASL.Controls.DataModel
             }
         }
 
+        /// <summary>
+        /// Representa o conjunto de pontos da ligação
+        /// </summary>
         public IList<Point> Points 
         { 
             get => _points;

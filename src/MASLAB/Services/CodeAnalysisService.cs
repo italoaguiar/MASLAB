@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.Completion;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -15,14 +16,16 @@ using System.Composition.Hosting;
 using System.IO;
 using System.Runtime;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace MASLAB.Services
 {
     /// <summary>
     /// Serviço de análise C# para o editor de código
     /// </summary>
-    public class CodeAnalysisService
+    internal class CodeAnalysisService
     {
         private CodeAnalysisService() { }
 
@@ -38,9 +41,9 @@ namespace MASLAB.Services
                 VersionStamp.Create(),
                 "codeAnalysis",
                 "CodeAnalysis",
-                LanguageNames.CSharp).
-                WithMetadataReferences(DefaultReferences
-            );
+                LanguageNames.CSharp
+                )
+                .WithMetadataReferences(DefaultReferences);
             
         }
 
@@ -49,14 +52,13 @@ namespace MASLAB.Services
         private static readonly IEnumerable<MetadataReference> DefaultReferences =
             new[]
             {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(App).Assembly.Location),
-                MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Runtime.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(appDir, "MathNet.Numerics.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(appDir, "FSharp.Core.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(appDir, "FParsec.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(appDir, "FParsecCS.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(appDir, "FSharp.Core.dll"))
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location, documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Runtime.Extensions.xml")),
+                MetadataReference.CreateFromFile(typeof(App).Assembly.Location, documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/MASLAB.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Runtime.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Runtime.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "MathNet.Numerics.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/MathNet.Numerics.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "FSharp.Core.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/FSharp.Core.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "FParsec.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/FParsec.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "FParsecCS.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/FParsecCS.xml")),                
             };
 
         //singleton
@@ -85,7 +87,6 @@ namespace MASLAB.Services
             workspace.ClearSolution();
             var project = workspace.AddProject(projectInfo);
             document = workspace.AddDocument(project.Id, "CodeAnalysis.cs", sourceText);
-
 
             return service;
         }
@@ -151,6 +152,10 @@ namespace MASLAB.Services
 
 
 
+        /// <summary>
+        /// Métudo utilizado para obter erros de sintaxe no código
+        /// </summary>
+        /// <returns>Conjunto de erros e avisos detectados</returns>
         public Task<ImmutableArray<Diagnostic>> GetDiagnosticsAsync()
         {
             return Task.Run(() =>
@@ -164,6 +169,56 @@ namespace MASLAB.Services
 
                 return compilation.GetDiagnostics();
             });            
+        }
+
+
+
+
+        /// <summary>
+        /// Obtém a descrição para um determinado token em uma posição
+        /// </summary>
+        /// <param name="position">Posição do token</param>
+        /// <returns>Descrição do token</returns>
+        public async Task<string> GetInfoAt(int position)
+        {
+            return await Task.Run(async () =>
+            {
+                var service = Microsoft.CodeAnalysis.QuickInfo.QuickInfoService.GetService(document);
+
+                var info = await service.GetQuickInfoAsync(document, position);
+
+                return info != null ? string.Join(Environment.NewLine, info.Sections.Select(x=> x.Text)) : null;
+            });
+        }
+
+
+        public async Task<List<(string,string)>> GetMethodSignature(int position)
+        {
+            return await Task.Run(async () =>
+            {
+                try
+                {
+                    var root = await document.GetSyntaxRootAsync();
+                    var model = await document.GetSemanticModelAsync();
+                    var token = root.FindToken(position);
+                    var node = root.FindNode(token.Span);
+
+                    var group = model.GetMemberGroup(node);
+                    
+                    if (group != null && group.Length > 0)
+                    {
+                        List<(string, string)> r = new List<(string, string)>();
+                        foreach (var i in group)
+                        {
+                            r.Add((i.ToDisplayString(), i.ToMinimalDisplayString(model,position)));
+                        }
+                        return r;
+                    }
+                    return null;
+                    
+                }
+                catch { return null; }
+            });
         }
 
 

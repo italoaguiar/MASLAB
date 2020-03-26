@@ -16,28 +16,35 @@ using Avalonia.Threading;
 using AvaloniaEdit.Folding;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.SharpDevelop.Editor;
-using ICSharpCode.AvalonEdit.AddIn;
+using MASLAB.Services;
 using AvaloniaEdit.Utils;
 using System.ComponentModel;
-using MASLAB.Services;
 using System.Windows.Input;
 using MASLAB.Models;
+using System.Runtime.InteropServices;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace MASLAB.Views
 {
     using Pair = KeyValuePair<int, IControl>;
 
-
+    /// <summary>
+    /// Representa a janela de propriedades de um tanque
+    /// </summary>
     public class TankProperties : Window
     {
+        /// <summary>
+        /// Cria uma nova instância de TankProperties
+        /// </summary>
         public TankProperties()
         {
             this.InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #endif
+
 
 
             _editor = this.FindControl<TextEditor>("Editor");
@@ -47,11 +54,14 @@ namespace MASLAB.Views
             _editor.TextArea.TextEntered += textEditor_TextArea_TextEntered;
             _editor.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             _editor.TextArea.TextInput += TextArea_TextInput;
-            _editor.TextArea.Initialized += (s,a) => AnalyzeCodeSyntax();
+            _editor.TextArea.Initialized += (s, a) => AnalyzeCodeSyntax();
             _editor.KeyUp += TextArea_KeyUp;
             _editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 
-            
+            _insightWindow = new OverloadInsightWindow(_editor.TextArea);
+
+            _editor.FontFamily = GetPlatformFontFamily();
+
             _editor.TextArea.PointerMoved += TextArea_PointerMoved;
 
             foldingManager = FoldingManager.Install(_editor.TextArea);
@@ -65,7 +75,7 @@ namespace MASLAB.Views
                 services.AddService(typeof(ITextMarkerService), textMarkerService);
             this.textMarkerService = textMarkerService;
 
-
+            
 
             this.AddHandler(PointerWheelChangedEvent, (o, i) =>
             {
@@ -74,24 +84,47 @@ namespace MASLAB.Views
                 else _editor.FontSize = _editor.FontSize > 1 ? _editor.FontSize - 1 : 1;
             }, RoutingStrategies.Bubble, true);
 
-
-            
+            codeService = CodeAnalysisService.LoadDocument(_editor.Document.Text);
 
             UndoCommand = new CommandAdapter(true) { Action = (p) => _editor.Undo() };
             RedoCommand = new CommandAdapter(true) { Action = (p) => _editor.Redo() };
         }
 
+        private static string GetPlatformFontFamily()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return "Consolas";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return "Menlo";
+            }
+            else
+            {
+                return "Monospace";
+            }
+        }
 
+
+        /// <summary>
+        /// Comando de Desfazer
+        /// </summary>
         public ICommand UndoCommand { get; set; }
+
+        /// <summary>
+        /// Comando de Refazer
+        /// </summary>
         public ICommand RedoCommand { get; set; }
 
 
 
-        private void TextArea_PointerMoved(object sender, PointerEventArgs e)
+        private async void TextArea_PointerMoved(object sender, PointerEventArgs e)
         {
-            var pos = _editor.TextArea.TextView.GetPositionFloor(e.GetPosition(_editor.TextArea.TextView) + _editor.TextArea.TextView.ScrollOffset);
+            var position = e.GetPosition(_editor.TextArea.TextView) + _editor.TextArea.TextView.ScrollOffset;
+            var pos = _editor.TextArea.TextView.GetPositionFloor(position);
             bool inDocument = pos.HasValue;
-            if (inDocument)
+            if (inDocument && !pos.Value.IsAtEndOfLine)
             {
                 TextLocation logicalPosition = pos.Value.Location;
                 int offset = _editor.Document.GetOffset(logicalPosition);
@@ -102,18 +135,33 @@ namespace MASLAB.Views
                 if (markerWithToolTip != null)
                 {
                     if (toolTip == null)
-                    {
-                        ToolTip.SetTip(_editor.TextArea, markerWithToolTip.ToolTip);
-                        ToolTip.SetIsOpen(_editor.TextArea, true);
+                    {                        
+                        ToolTip.SetTip(_editor, markerWithToolTip.ToolTip);
+                        ToolTip.SetIsOpen(_editor, true);
+                        return;
                     }
+                }
+
+                var info = await codeService.GetInfoAt(offset);
+                if(info != null)
+                {                    
+                    var tip = ToolTip.GetTip(_editor);
+                    if (tip != null && tip.ToString() != info)
+                    {
+                        ToolTip.SetIsOpen(_editor, false);
+                    }
+
+                    ToolTip.SetTip(_editor, info);
+                    ToolTip.SetIsOpen(_editor, true);
+                    return;
                 }
             }
             else
             {
-                ToolTip.SetTip(_editor.TextArea, null);
-                ToolTip.SetIsOpen(_editor.TextArea, false);
+                ToolTip.SetTip(_editor, null);
+                ToolTip.SetIsOpen(_editor, false);
             }
-            
+
         }
 
         private TextEditor _editor;
@@ -121,23 +169,17 @@ namespace MASLAB.Views
         private FoldingManager foldingManager;
         private BraceFoldingStrategy foldingStretegy;
         private ITextMarkerService textMarkerService;
+        private CodeAnalysisService codeService;
 
 #pragma warning disable IDE0044 // Adicionar modificador somente leitura
         private OverloadInsightWindow _insightWindow;
         private ToolTip toolTip;
 #pragma warning restore IDE0044 // Adicionar modificador somente leitura
-        
-        
 
 
-        MASL.Controls.DataModel.Tank tank;
 
-        public TankProperties SetTank(MASL.Controls.DataModel.Tank t)
-        {
-            tank = t;
-            _editor.Document.Text = t.SimulationCode;
-            return this;
-        }
+
+
 
 
 
@@ -165,7 +207,7 @@ namespace MASLAB.Views
                 var errorService = ErrorService.GetService();
                 errorService.Clear();
 
-                
+
                 var d = await CodeAnalysisService.LoadDocument(_editor.Document.Text).GetDiagnosticsAsync();
 
                 var s = d.Select(x =>
@@ -186,7 +228,7 @@ namespace MASLAB.Views
                     var span = item.Location.SourceSpan;
                     ITextMarker m = textMarkerService.Create(span.Start, span.Length);
                     m.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
-                    m.MarkerColor = item.Severity == DiagnosticSeverity.Error? Colors.Red : Colors.LightGreen;
+                    m.MarkerColor = item.Severity == DiagnosticSeverity.Error ? Colors.Red : Colors.LightGreen;
                     m.ToolTip = item.ToString();
                 }
             }
@@ -200,7 +242,7 @@ namespace MASLAB.Views
                 case "\n":
                     e.Handled = true;
 
-                    var ln = _editor.Document.GetLineByOffset(_editor.CaretOffset);                    
+                    var ln = _editor.Document.GetLineByOffset(_editor.CaretOffset);
 
                     string tb = "\n";
                     for (int i = ln.Offset; i < ln.EndOffset; i++)
@@ -227,10 +269,13 @@ namespace MASLAB.Views
                     _editor.CaretOffset = offset + (tb.Length > 1 ? oc : 1);
                     break;
                 //case "(":
-                //    e.Handled = true;
-                //    _editor.Document.Insert(_editor.CaretOffset, "()");
-                //    _editor.CaretOffset--;
+                //    //    e.Handled = true;
+                //    //    _editor.Document.Insert(_editor.CaretOffset, "()");
+                //    //    _editor.CaretOffset--;
                 //    break;
+                case ")":
+                    _insightWindow?.Close();
+                    break;
                 case "{":
                     e.Handled = true;
                     _editor.Document.Insert(_editor.CaretOffset, "{}");
@@ -252,14 +297,14 @@ namespace MASLAB.Views
                     _editor.CaretOffset--;
                     break;
                 case "/":
-                    if(_editor.CaretOffset > 1)
+                    if (_editor.CaretOffset > 1)
                     {
-                        if(_editor.Document.Text[_editor.CaretOffset -1] == '/' && _editor.Document.Text[_editor.CaretOffset - 2] == '/')
+                        if (_editor.Document.Text[_editor.CaretOffset - 1] == '/' && _editor.Document.Text[_editor.CaretOffset - 2] == '/')
                         {
                             var line = _editor.Document.GetLineByOffset(_editor.CaretOffset);
                             int offs = _editor.Document.GetText(line.Offset, line.Length).IndexOf('/');
                             string tab = "";
-                            for(int i = line.Offset; i< line.Offset + offs; i++)
+                            for (int i = line.Offset; i < line.Offset + offs; i++)
                             {
                                 if (char.IsLetterOrDigit(_editor.Document.Text[i])) return;
 
@@ -270,7 +315,7 @@ namespace MASLAB.Views
                             int lOffset = _editor.CaretOffset;
                             string snippet = $"/<summary>\n{tab}/// \n{tab}///</summary>";
                             _editor.Document.Insert(_editor.CaretOffset, snippet);
-                            _editor.CaretOffset = lOffset + snippet.Length/2 + 1;
+                            _editor.CaretOffset = lOffset + snippet.Length / 2 + 1;
                         }
                     }
                     break;
@@ -286,7 +331,7 @@ namespace MASLAB.Views
                 }
             }
 
-            _insightWindow?.Hide();
+            //_insightWindow?.Hide();
 
             // Do not set e.Handled=true.
             // We still want to insert the character that was typed. 
@@ -294,7 +339,7 @@ namespace MASLAB.Views
 
         private void TextArea_TextInput(object sender, TextInputEventArgs e)
         {
-            
+
 
         }
 
@@ -309,7 +354,7 @@ namespace MASLAB.Views
                 _completionWindow = new CompletionWindow(_editor.TextArea);
                 _completionWindow.Closed += (o, args) => _completionWindow = null;
 
-                var data = await CodeAnalysisService.LoadDocument(_editor.Document.Text).GetCompletitionDataAt(_editor.CaretOffset);
+                var data = await codeService.GetCompletitionDataAt(_editor.CaretOffset);
 
                 if (data.Count == 0 || _completionWindow == null) return;
 
@@ -326,8 +371,23 @@ namespace MASLAB.Views
         {
             try
             {
-                //if(!char.IsLetterOrDigit(e.Text[0]) && !string.IsNullOrWhiteSpace(e.Text))
-                if (await CodeAnalysisService.LoadDocument(_editor.Document.Text).ShouldTriggerCompletion(_editor.CaretOffset))
+                codeService = CodeAnalysisService.LoadDocument(_editor.Document.Text);
+
+                if (e.Text == "(")
+                {
+                    var p = await codeService.GetMethodSignature(_editor.CaretOffset -2);
+                    if (p != null)
+                    {
+
+                        _insightWindow = new OverloadInsightWindow(_editor.TextArea);
+                        _insightWindow.Closed += (s, a) => _insightWindow = null;
+
+                        _insightWindow.Provider = new OverloadProvider(p);
+                        _insightWindow.Show();
+                        return;
+                    }
+                }
+                if (await codeService.ShouldTriggerCompletion(_editor.CaretOffset))
                 {
                     _completionWindow = new CompletionWindow(_editor.TextArea);
                     _completionWindow.Closed += (o, args) => _completionWindow = null;
@@ -346,145 +406,28 @@ namespace MASLAB.Views
             }
             catch { }
 
-            
-
-
-            //if (e.Text == ".")
-            //{
-
-            //    _completionWindow = new CompletionWindow(_editor.TextArea);
-            //    _completionWindow.Closed += (o, args) => _completionWindow = null;
-
-            //    var data = _completionWindow.CompletionList.CompletionData;
-            //    data.Add(new MyCompletionData("Item1"));
-            //    data.Add(new MyCompletionData("Item2"));
-            //    data.Add(new MyCompletionData("Item3"));
-            //    data.Add(new MyCompletionData("Item4"));
-            //    data.Add(new MyCompletionData("Item5"));
-            //    data.Add(new MyCompletionData("Item6"));
-            //    data.Add(new MyCompletionData("Item7"));
-            //    data.Add(new MyCompletionData("Item8"));
-            //    data.Add(new MyCompletionData("Item9"));
-            //    data.Add(new MyCompletionData("Item10"));
-            //    data.Add(new MyCompletionData("Item11"));
-            //    data.Add(new MyCompletionData("Item12"));
-            //    data.Add(new MyCompletionData("Item13"));
-
-
-            //    _completionWindow.Show();
-            //}
-            //else if (e.Text == "(")
-            //{
-            //    
-            //}
         }
 
-        //private class MyOverloadProvider : IOverloadProvider
-        //{
-        //    private readonly IList<(string header, string content)> _items;
-        //    private int _selectedIndex;
-
-        //    public MyOverloadProvider(ImmutableArray<TaggedText> t)
-        //    {
-        //        _items = new List<(string, string)>();
-        //        foreach (var d in t)
-        //            _items.Add((d.Text, d.Tag));
-        //    }
-
-        //    public MyOverloadProvider(IList<(string header, string content)> items)
-        //    {
-        //        _items = items;
-        //        SelectedIndex = 0;
-        //    }
-
-        //    public int SelectedIndex
-        //    {
-        //        get => _selectedIndex;
-        //        set
-        //        {
-        //            _selectedIndex = value;
-        //            OnPropertyChanged();
-        //            // ReSharper disable ExplicitCallerInfoArgument
-        //            OnPropertyChanged(nameof(CurrentHeader));
-        //            OnPropertyChanged(nameof(CurrentContent));
-        //            // ReSharper restore ExplicitCallerInfoArgument
-        //        }
-        //    }
-
-        //    public int Count => _items.Count;
-        //    public string CurrentIndexText => null;
-        //    public object CurrentHeader => _items[SelectedIndex].header;
-        //    public object CurrentContent => _items[SelectedIndex].content;
-
-        //    public event PropertyChangedEventHandler PropertyChanged;
-
-        //    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        //    {
-        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //    }
-        //}
-        //public class MyCompletionData : ICompletionData
-        //{
-        //    public MyCompletionData(string text)
-        //    {
-        //        Text = text;
-        //    }
-
-        //    public IBitmap Image => null;
-
-        //    public string Text { get; }
-
-        //    // Use this property if you want to show a fancy UIElement in the list.
-        //    public object Content => Text;
-
-        //    public object Description => "Description for " + Text;
-
-        //    public double Priority { get; } = 0;
-
-        //    public void Complete(TextArea textArea, ISegment completionSegment,
-        //        EventArgs insertionRequestEventArgs)
-        //    {
-        //        textArea.Document.Replace(completionSegment, Text);
-        //    }
-        //}
 
 
+        MASL.Controls.DataModel.Tank tank;
 
-        //class ElementGenerator : VisualLineElementGenerator, IComparer<Pair>
-        //{
-        //    public List<Pair> controls = new List<Pair>();
+        /// <summary>
+        /// Atribui o tanque associado ao controle
+        /// </summary>
+        /// <param name="t">Modelo do tanque da simulação</param>
+        /// <returns>Instância de TankProperties</returns>
+        public TankProperties SetTank(MASL.Controls.DataModel.Tank t)
+        {
+            tank = t;
+            _editor.Document.Text = t.SimulationCode;
+            return this;
+        }
 
-        //    /// <summary>
-        //    /// Gets the first interested offset using binary search
-        //    /// </summary>
-        //    /// <returns>The first interested offset.</returns>
-        //    /// <param name="startOffset">Start offset.</param>
-        //    public override int GetFirstInterestedOffset(int startOffset)
-        //    {
-        //        int pos = controls.BinarySearch(new Pair(startOffset, null), this);
-        //        if (pos < 0)
-        //            pos = ~pos;
-        //        if (pos < controls.Count)
-        //            return controls[pos].Key;
-        //        else
-        //            return -1;
-        //    }
-
-        //    public override VisualLineElement ConstructElement(int offset)
-        //    {
-        //        int pos = controls.BinarySearch(new Pair(offset, null), this);
-        //        if (pos >= 0)
-        //            return new InlineObjectElement(0, controls[pos].Value);
-        //        else
-        //            return null;
-        //    }
-
-        //    int IComparer<Pair>.Compare(Pair x, Pair y)
-        //    {
-        //        return x.Key.CompareTo(y.Key);
-        //    }
-        //}
-
+        /// <summary>
+        /// Método chamado quando a janela está se fechando
+        /// </summary>
+        /// <param name="e">Parâmetros do evento</param>
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -493,5 +436,42 @@ namespace MASLAB.Views
         }
     }
 
+    internal class OverloadProvider : IOverloadProvider
+    {
+        private readonly IList<(string header, string content)> _items;
+        private int _selectedIndex;
+
+        public OverloadProvider(IList<(string header, string content)> items)
+        {
+            _items = items;
+            SelectedIndex = 0;
+        }
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                _selectedIndex = value;
+                OnPropertyChanged();
+                // ReSharper disable ExplicitCallerInfoArgument
+                OnPropertyChanged(nameof(CurrentHeader));
+                OnPropertyChanged(nameof(CurrentContent));
+                // ReSharper restore ExplicitCallerInfoArgument
+            }
+        }
+
+        public int Count => _items.Count;
+        public string CurrentIndexText => null;
+        public object CurrentHeader => _items[SelectedIndex].header;
+        public object CurrentContent => _items[SelectedIndex].content;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
     
 }

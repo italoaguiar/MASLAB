@@ -9,8 +9,14 @@ using OxyPlot.Avalonia;
 
 namespace MASLAB
 {
+    /// <summary>
+    /// Representa a classe App do software
+    /// </summary>
     public class App : Application
     {
+        /// <summary>
+        /// Inicializa as dependências do software
+        /// </summary>
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -21,8 +27,15 @@ namespace MASLAB
             CodeAnalysisService.LoadDocument("");
         }
 
+        /// <summary>
+        /// Janela principal do software
+        /// </summary>
         public static Window MainWindow { get; set; }
 
+
+        /// <summary>
+        /// Método invocado na finalização da inicialização do framework
+        /// </summary>
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

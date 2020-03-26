@@ -9,8 +9,14 @@ using System.Threading.Tasks;
 
 namespace MASLAB.Views
 {
+    /// <summary>
+    /// Janela principal do software
+    /// </summary>
     public class MainWindow : Window
     {
+        /// <summary>
+        /// Cria uma nova instância de MainWindow
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

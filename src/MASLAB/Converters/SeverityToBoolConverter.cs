@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MASLAB.Converters
 {
-    public class SeverityToBoolConverter : IValueConverter
+    internal class SeverityToBoolConverter : IValueConverter
     {
         public bool CheckWarning { get; set; }
 

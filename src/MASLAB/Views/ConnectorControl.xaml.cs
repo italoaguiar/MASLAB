@@ -9,8 +9,14 @@ using System.Reflection;
 
 namespace MASLAB.Views
 {
+    /// <summary>
+    /// Controle de conexão entre tanques
+    /// </summary>
     public class ConnectorControl : UserControl
     {
+        /// <summary>
+        /// Cria uma nova instância de ConnectorControl
+        /// </summary>
         public ConnectorControl()
         {
             this.InitializeComponent();
@@ -21,6 +27,10 @@ namespace MASLAB.Views
             AvaloniaXamlLoader.Load(this);
         }
 
+        /// <summary>
+        /// Método invocado quando o template XAML é aplicado
+        /// </summary>
+        /// <param name="e">Argumentos do template</param>
         protected override void OnTemplateApplied(TemplateAppliedEventArgs e)
         {
             base.OnTemplateApplied(e);
@@ -32,28 +42,45 @@ namespace MASLAB.Views
             }
         }
 
+        /// <summary>
+        /// Conjuntos de pontos desenhado
+        /// </summary>
         public static readonly AvaloniaProperty<IList<Point>> PointsProperty =
             AvaloniaProperty.Register<ConnectorControl, IList<Point>>("Points", new List<Point>());
 
+        /// <summary>
+        /// Conjunto de pontos desenhado
+        /// </summary>
         public IList<Point> Points
         {
             get { return this.GetValue(PointsProperty); }
             set { this.SetValue(PointsProperty, value); }
         }
 
-
+        /// <summary>
+        /// Representa a janela pai do controle
+        /// </summary>
         public static readonly AvaloniaProperty<IControl> ParentWindowProperty =
             AvaloniaProperty.Register<ConnectorControl, IControl>("ParentWindow");
 
+        /// <summary>
+        /// Representa a janela pai do controle
+        /// </summary>
         public IControl ParentWindow
         {
             get => GetValue(ParentWindowProperty);
             set => SetValue(ParentWindowProperty, value);
         }
 
+        /// <summary>
+        /// Determina se a interação está habilitada
+        /// </summary>
         public static readonly AvaloniaProperty<bool> IsLinkEnabledProperty =
             AvaloniaProperty.Register<ConnectorControl, bool>("IsLinkEnabled", false);
 
+        /// <summary>
+        /// Determina se a interação está habilitada
+        /// </summary>
         public bool IsLinkEnabled
         {
             get => GetValue(IsLinkEnabledProperty);

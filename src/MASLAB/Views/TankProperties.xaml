@@ -33,10 +33,9 @@
       </Button>-->
     </StackPanel>
 
-    <Editor:TextEditor Name="Editor" Grid.Row="1"/>
-    
-    
-    <Border Grid.Row="2" Grid.ColumnSpan="2" Background="#2B579A" BorderBrush="#1f4073" BorderThickness="0,.7,0,0" Height="30">
+        <Editor:TextEditor Name="Editor" Grid.Row="1"/>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="2" Background="#2B579A" BorderBrush="#1f4073" BorderThickness="0,.7,0,0" Height="30">
       <Slider Width="120" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15,0"/>
     </Border>
 

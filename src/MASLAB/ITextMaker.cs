@@ -99,7 +99,10 @@ namespace ICSharpCode.SharpDevelop.Editor
         object ToolTip { get; set; }
     }
 
-    [Flags]
+    /// <summary>
+    /// Editor Text Marker Types
+    /// </summary>
+    [Flags]    
     public enum TextMarkerTypes
     {
         /// <summary>
@@ -137,6 +140,9 @@ namespace ICSharpCode.SharpDevelop.Editor
         CircleInScrollBar = 0x1000
     }
 
+    /// <summary>
+    /// Text Marker Service Interface
+    /// </summary>
     public interface ITextMarkerService
     {
         /// <summary>

@@ -12,14 +12,18 @@ using System.Windows.Input;
 
 namespace MASLAB.ViewModels
 {
+    /// <summary>
+    /// Representa a ViewModel do Tanque
+    /// </summary>
     public class TankViewModel:ViewModelBase
     {
+        /// <summary>
+        /// Cria uma nova instância de TankViewModel
+        /// </summary>
         public TankViewModel()
         {
             InputConnectionCommand = new CommandAdapter(true, InputConnectionRequested);
             OutputConnectionCommand = new CommandAdapter(true, OutputConnectionRequested);
-
-            
         }
 
 

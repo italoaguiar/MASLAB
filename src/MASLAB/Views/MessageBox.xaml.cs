@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 
 namespace MASLAB.Views
 {
+    /// <summary>
+    /// Representa uma janela de diálogo
+    /// </summary>
     public class MessageBox : Window
     {
+        /// <summary>
+        /// Cria uma nova instância de MessageBox
+        /// </summary>
         public MessageBox()
         {
             this.InitializeComponent();
@@ -20,23 +26,65 @@ namespace MASLAB.Views
             AvaloniaXamlLoader.Load(this);
         }
 
+        /// <summary>
+        /// Representa os botões do diálogo MessageBox
+        /// </summary>
         public enum MessageBoxButtons
         {
+            /// <summary>
+            /// Ok
+            /// </summary>
             Ok,
+
+            /// <summary>
+            /// Ok e Cancelar
+            /// </summary>
             OkCancel,
+
+            /// <summary>
+            /// Sim e não
+            /// </summary>
             YesNo,
+
+            /// <summary>
+            /// Sim, não e cancelar
+            /// </summary>
             YesNoCancel
         }
 
+        /// <summary>
+        /// Resultado do diálogo MessageBox
+        /// </summary>
         public enum MessageBoxResult
         {
+            /// <summary>
+            /// Ok
+            /// </summary>
             Ok,
+
+            /// <summary>
+            /// Cancelado
+            /// </summary>
             Cancel,
+
+            /// <summary>
+            /// Sim
+            /// </summary>
             Yes,
+
+            /// <summary>
+            /// Não
+            /// </summary>
             No
         }
 
-
+        /// <summary>
+        /// Exibe a janela de diálogo
+        /// </summary>
+        /// <param name="text">Texto a ser exibido</param>
+        /// <param name="title">Título da janela</param>
+        /// <param name="buttons">Botões do diálogo</param>
+        /// <returns>Botão clicado pelo usuário</returns>
         public static Task<MessageBoxResult> Show(string text, string title = "", MessageBoxButtons buttons = MessageBoxButtons.Ok)
         {
             var msgbox = new MessageBox()

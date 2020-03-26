@@ -12,7 +12,7 @@ namespace Simulation
     public abstract class SimulationTank
     {
         /// <summary>
-        /// Área da base do tanque
+        /// Area da base do tanque
         /// </summary>
         public double TankArea { get; set; } = 1;
 
@@ -41,6 +41,7 @@ namespace Simulation
         /// <param name="time">Parâmetro de tempo</param>
         /// <param name="input1">Entrada 1 do tanque</param>
         /// <param name="input2">Entrada 2 do tanque</param>
+        /// <param name="simulationStep">Intervalo de tempo entre chamadas de método</param>
         /// <returns>Saída calculada para o tanque</returns>
         public abstract SimulationData OnUpdate(TimeSpan time, TimeSpan simulationStep, double input1, double input2);
 
@@ -94,6 +95,7 @@ namespace Simulation
         /// <summary>
         /// Insere uma nova linha no log da simulação
         /// </summary>
+        /// <param name="time">Instante de tempo</param>
         /// <param name="value">valor a ser inserido</param>
         public void Log(TimeSpan time, object value)
         {

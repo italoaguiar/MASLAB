@@ -27,16 +27,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace ICSharpCode.AvalonEdit.AddIn
+namespace MASLAB.Services
 {
     /// <summary>
     /// Handles the text markers for a code editor.
     /// </summary>
-    public sealed class TextMarkerService : DocumentColorizingTransformer, IBackgroundRenderer, ITextMarkerService, ITextViewConnect
+    internal sealed class TextMarkerService : DocumentColorizingTransformer, IBackgroundRenderer, ITextMarkerService, ITextViewConnect
     {
         TextSegmentCollection<TextMarker> markers;
         TextDocument document;
 
+        /// <summary>
+        /// Cria uma nova instância de TextMarkerService
+        /// </summary>
+        /// <param name="document"></param>
         public TextMarkerService(TextDocument document)
         {
             if (document == null)
@@ -273,7 +277,7 @@ namespace ICSharpCode.AvalonEdit.AddIn
         #endregion
     }
 
-    public sealed class TextMarker : TextSegment, ITextMarker
+    internal sealed class TextMarker : TextSegment, ITextMarker
     {
         readonly TextMarkerService service;
 
@@ -405,7 +409,7 @@ namespace ICSharpCode.AvalonEdit.AddIn
         public object ToolTip { get; set; }
     }
 
-    public static class Extensions
+    internal static class Extensions
     {
         public static bool Equals(this Color color, Color c)
         {

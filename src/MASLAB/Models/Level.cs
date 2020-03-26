@@ -10,12 +10,19 @@ using System.Windows.Input;
 
 namespace MASL.Controls.DataModel
 {
+    /// <summary>
+    /// Representa um nível da simulação
+    /// </summary>
     public class Level: INotifyPropertyChanged
     {
         private ObservableCollection<Tank> _items;
         private string _levelName;
         private ICommand _addCommand;
 
+        /// <summary>
+        /// Cria uma nova instância de Level
+        /// </summary>
+        /// <param name="parent">Projeto pai do Level</param>
         public Level(Project parent)
         {
             Project = parent;
@@ -61,6 +68,9 @@ namespace MASL.Controls.DataModel
             }
         }
 
+        /// <summary>
+        /// Projeto pai do Level
+        /// </summary>
         public Project Project { get; private set; }
 
         private void OnPropertyChanged(string propertyName)

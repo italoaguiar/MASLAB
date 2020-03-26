@@ -68,7 +68,16 @@ namespace MASLAB.Services
             ConnectionStarted?.Invoke(c);
         }
 
+        /// <summary>
+        /// Trata a finalização de uma conexão
+        /// </summary>
+        /// <param name="link">Link finalizado</param>
         public delegate void ConnectionCompletedHandler(Link link);
+
+        /// <summary>
+        /// Trata o início de uma conexão
+        /// </summary>
+        /// <param name="c">Conexão de partida</param>
         public delegate void ConnectionStartedHandler(Connection c);
 
         /// <summary>

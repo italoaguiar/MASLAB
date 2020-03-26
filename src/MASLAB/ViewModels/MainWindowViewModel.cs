@@ -224,7 +224,6 @@ namespace MASLAB.ViewModels
         bool about;
         int selectedTabIndex = 0;
 
-        public string Greeting => "Welcome to Avalonia!";
 
 
         /// <summary>
@@ -325,7 +324,9 @@ namespace MASLAB.ViewModels
         /// </summary>
         public CommandAdapter AboutCommand { get; private set; }
 
-
+        /// <summary>
+        /// Determina se a janela "Sobre" está aberta
+        /// </summary>
         public bool IsAboutOpen
         {
             get => about;

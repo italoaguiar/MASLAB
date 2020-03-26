@@ -11,7 +11,7 @@ namespace MASLAB.Services
     /// <summary>
     /// Serviço de erros de compilação e análise de código
     /// </summary>
-    public class ErrorService
+    internal class ErrorService
     {
         /// <summary>
         /// Cria uma nova instância de ErrorService

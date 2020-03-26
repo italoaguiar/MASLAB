@@ -7,8 +7,14 @@ using System;
 
 namespace MASLAB.Views
 {
+    /// <summary>
+    /// Representa um tanque do Diagrama
+    /// </summary>
     public class Tank : UserControl
     {
+        /// <summary>
+        /// Cria uma nova instância de Tank
+        /// </summary>
         public Tank()
         {
             this.InitializeComponent();
@@ -28,13 +34,19 @@ namespace MASLAB.Views
             ViewModel.CurrentPoint = point;
         }
 
-        public TankViewModel ViewModel { get; set; } = new TankViewModel();
+        /// <summary>
+        /// Determina a ViewModel do Tank
+        /// </summary>
+        protected TankViewModel ViewModel { get; set; } = new TankViewModel();
 
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
         }
 
+        /// <summary>
+        /// Determina do controle Pai de Tank
+        /// </summary>
         public static readonly AvaloniaProperty<IControl> ParentContainerProperty =
             AvaloniaProperty.Register<Tank, IControl>("ParentContainer", validate:CoerceParentControl);
 
@@ -44,6 +56,10 @@ namespace MASLAB.Views
             return t;
         }
 
+
+        /// <summary>
+        /// Determina do controle Pai de Tank
+        /// </summary>
         public IControl ParentContainer
         {
             get => GetValue(ParentContainerProperty);
@@ -54,6 +70,9 @@ namespace MASLAB.Views
         }
 
 
+        /// <summary>
+        /// Representa o modelo de dados de Tank
+        /// </summary>
         public static readonly AvaloniaProperty<MASL.Controls.DataModel.Tank> TankDataProperty =
             AvaloniaProperty.Register<Tank, MASL.Controls.DataModel.Tank>("Tank", validate: CoerceTank);
 
@@ -63,6 +82,9 @@ namespace MASLAB.Views
             return t;
         }
 
+        /// <summary>
+        /// Representa o modelo de dados de Tank
+        /// </summary>
         public MASL.Controls.DataModel.Tank TankData
         {
             get => GetValue(TankDataProperty);
@@ -72,12 +94,16 @@ namespace MASLAB.Views
             }
         }
 
-
+        /// <summary>
+        /// Representa o nível do tanque
+        /// </summary>
         public static readonly AvaloniaProperty<double> LevelProperty =
             AvaloniaProperty.Register<Tank, double>("Level", 50);
 
 
-
+        /// <summary>
+        /// Representa o nível do tanque
+        /// </summary>
         public double Level
         {
             get => GetValue(LevelProperty);

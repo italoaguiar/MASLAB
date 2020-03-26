@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
         xmlns:c="clr-namespace:MASLAB.Converters;assembly=MASLAB"
-        xmlns:dc="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
         xmlns:e="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
         xmlns:m="clr-namespace:MASLAB.Views;assembly=MASLAB"
         xmlns:plot="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"
@@ -408,8 +407,8 @@
         <TextBlock Text="Pausado! Pare a simulação para editar o projeto." IsVisible="{Binding Simulator.IsPaused}" Foreground="#F0F0F0" VerticalAlignment="Center" Margin="3,0"/>
       </StackPanel>
     </Border>
-    <Grid Name="pp" Width="800" Height="508" Grid.RowSpan="6">
-      <Popup Name="popup" IsOpen="{Binding IsAboutOpen, Mode=TwoWay}" Width="800" Height="508" StaysOpen="False" PlacementTarget="{Binding #pp}" PlacementMode="AnchorAndGravity">
+    <Grid Name="pp" Width="600" Height="380" Grid.RowSpan="6">
+      <Popup Name="popup" IsOpen="{Binding IsAboutOpen, Mode=TwoWay}" Width="600" Height="381" StaysOpen="False" PlacementTarget="{Binding #pp}" PlacementMode="AnchorAndGravity">
         <Image Source="/Assets/splashscreen.png"/>
       </Popup>
     </Grid>

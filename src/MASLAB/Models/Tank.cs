@@ -33,6 +33,10 @@ namespace MASL.Controls.DataModel
 
         private static string DefaultCode = null;
 
+        /// <summary>
+        /// Cria uma nova instância de Tank
+        /// </summary>
+        /// <param name="parent">Nível pai do Tank</param>
         public Tank(Level parent)
         {
             Parent = parent;
@@ -85,6 +89,9 @@ namespace MASL.Controls.DataModel
             }
         }
 
+        /// <summary>
+        /// Saída calculada na simulação
+        /// </summary>
         public double Output
         {
             get => output;
@@ -125,6 +132,13 @@ namespace MASL.Controls.DataModel
             return SimulationTank;
         }
 
+        /// <summary>
+        /// Atualiza o estado do tanque para o instante atual de tempo
+        /// </summary>
+        /// <param name="currentTime">Instante atual de tempo</param>
+        /// <param name="interval">Intervalo entre chamadas de função</param>
+        /// <param name="input1">Entrada 1 do tanque</param>
+        /// <param name="input2">Entrada 2 do tanque</param>
         public void UpdateTank(TimeSpan currentTime, TimeSpan interval, double input1, double input2)
         {
             var s = SimulationTank.OnUpdate(currentTime, interval, input1, input2);

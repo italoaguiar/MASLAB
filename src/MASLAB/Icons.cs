@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis;
 
 namespace MASLAB
 {
-    public static class Icons
+    internal static class Icons
     {
         private static IBitmap classIcon = LoadBitmap("Class.png");
         private static IBitmap propertyIcon = LoadBitmap("Property.png");

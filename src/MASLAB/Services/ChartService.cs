@@ -11,7 +11,7 @@ namespace MASLAB.Services
     /// <summary>
     /// Serviço de plotagem de gráficos
     /// </summary>
-    public class ChartService
+    internal class ChartService
     {
         /// <summary>
         /// Cria uma nova instância de ChartService
@@ -71,7 +71,7 @@ namespace MASLAB.Services
         }
     }
 
-    public class ChartDataEventArgs : EventArgs
+    internal class ChartDataEventArgs : EventArgs
     {
 
     }

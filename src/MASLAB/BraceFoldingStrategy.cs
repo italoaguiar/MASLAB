@@ -26,7 +26,7 @@ namespace ICSharpCode.AvalonEdit.Folding
     /// <summary>
     /// Allows producing foldings from a document based on braces.
     /// </summary>
-    public class BraceFoldingStrategy
+    internal class BraceFoldingStrategy
     {
         /// <summary>
         /// Gets/Sets the opening brace. The default value is '{'.

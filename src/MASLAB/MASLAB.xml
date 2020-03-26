@@ -1,0 +1,1567 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MASLAB</name>
+    </assembly>
+    <members>
+        <member name="T:MASLAB.App">
+            <summary>
+            Representa a classe App do software
+            </summary>
+        </member>
+        <member name="M:MASLAB.App.Initialize">
+            <summary>
+            Inicializa as dependências do software
+            </summary>
+        </member>
+        <member name="P:MASLAB.App.MainWindow">
+            <summary>
+            Janela principal do software
+            </summary>
+        </member>
+        <member name="M:MASLAB.App.OnFrameworkInitializationCompleted">
+            <summary>
+            Método invocado na finalização da inicialização do framework
+            </summary>
+        </member>
+        <member name="T:MASLAB.Models.CommandAdapter">
+            <summary>
+            Cria um adaptador para a interface ICommand
+            </summary>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.#ctor">
+            <summary>
+            Cria uma nova instância de CommandAdapter
+            </summary>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.#ctor(System.Boolean)">
+            <summary>
+            Cria uma nova instância de CommandAdapter
+            </summary>
+            <param name="canExecute">Determina se o comando pode ser executado</param>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.#ctor(System.Action{System.Object})">
+            <summary>
+            Cria uma nova instância de CommandAdapter
+            </summary>
+            <param name="action">Determina a ação a ser executada pelo comando</param>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.#ctor(System.Boolean,System.Action{System.Object})">
+            <summary>
+            Cria uma nova instância de CommandAdapter
+            </summary>
+            <param name="canExecute">Determina se o comando pode ser executado</param>
+            <param name="action">Determina a ação a ser executada pelo comando</param>
+        </member>
+        <member name="E:MASLAB.Models.CommandAdapter.CanExecuteChanged">
+            <summary>
+            Notifica se o comando pode ser executado ou não
+            </summary>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.CanExecute(System.Object)">
+            <summary>
+            Obtém a possibilidade de execução do comando.
+            </summary>
+            <param name="parameter">Parâmetro do comando</param>
+            <returns>Valor indicando se o comando pode ser executado.</returns>
+        </member>
+        <member name="P:MASLAB.Models.CommandAdapter.Action">
+            <summary>
+            Ação a ser executada pelo comando.
+            </summary>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.SetCanExecute(System.Boolean)">
+            <summary>
+            Atribui a possibilidade de execução do comando
+            </summary>
+            <param name="canExecute">Valor indicando se o comando pode ser executado.</param>
+        </member>
+        <member name="M:MASLAB.Models.CommandAdapter.Execute(System.Object)">
+            <summary>
+            Executa o comando
+            </summary>
+            <param name="parameter">Parâmetro do comando</param>
+        </member>
+        <member name="T:MASLAB.Services.ChartService">
+            <summary>
+            Serviço de plotagem de gráficos
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.ChartService.#ctor">
+            <summary>
+            Cria uma nova instância de ChartService
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.ChartService.GetService">
+            <summary>
+            Obtém a instância do serviço
+            </summary>
+            <returns>Instância de ChartService</returns>
+        </member>
+        <member name="M:MASLAB.Services.ChartService.Plot(System.String,System.TimeSpan,System.Double)">
+            <summary>
+            Inclui um novo valor na plotagem de gráfico
+            </summary>
+            <param name="serieName"></param>
+            <param name="time"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:MASLAB.Services.CodeAnalysisService">
+            <summary>
+            Serviço de análise C# para o editor de código
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.CodeAnalysisService.LoadDocument(System.String)">
+            <summary>
+            Efetua o carregamento do código para a análise no mecanismo Roslyn
+            </summary>
+            <param name="code">Código C# a ser analisado</param>
+            <returns>Instância do serviço de análise</returns>
+        </member>
+        <member name="M:MASLAB.Services.CodeAnalysisService.GetCompletitionDataAt(System.Int32)">
+            <summary>
+            Método utilizado para obter as sugestões do recurso
+            auto completar do editor de código.
+            </summary>
+            <param name="position">Posição atual do cursor</param>
+            <returns>Conjunto de sugestões para o editor</returns>
+        </member>
+        <member name="M:MASLAB.Services.CodeAnalysisService.ShouldTriggerCompletion(System.Int32)">
+            <summary>
+            Método utilizado para determinar se o caractere
+            digitado pelo usuário pode ser utilizado para
+            abrir a janela de sugestões do editor
+            </summary>
+            <param name="position">Posição atual do cursor</param>
+            <returns>True se o caractere digitado é um gatilho, False do contrário</returns>
+        </member>
+        <member name="M:MASLAB.Services.CodeAnalysisService.GetDiagnosticsAsync">
+            <summary>
+            Métudo utilizado para obter erros de sintaxe no código
+            </summary>
+            <returns>Conjunto de erros e avisos detectados</returns>
+        </member>
+        <member name="M:MASLAB.Services.CodeAnalysisService.GetInfoAt(System.Int32)">
+            <summary>
+            Obtém a descrição para um determinado token em uma posição
+            </summary>
+            <param name="position">Posição do token</param>
+            <returns>Descrição do token</returns>
+        </member>
+        <member name="M:MASLAB.Services.CompilationService.LoadCode(System.String)">
+            <summary>
+            Efetua o carregamento do código para a análise no mecanismo Roslyn
+            </summary>
+            <param name="code">Código C# a ser analisado</param>
+            <returns>Instância do serviço de análise</returns>
+        </member>
+        <member name="T:MASLAB.Services.ConnectionHelper">
+            <summary>
+            Classe auxiliar para efetuar a conexão entre tanques
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.ConnectionHelper.RequestConnection(MASL.Controls.DataModel.Connection)">
+            <summary>
+            Notifica a requisição de uma nova conexão ou finalização de uma existente
+            </summary>
+            <param name="c">Conexão atual</param>
+        </member>
+        <member name="M:MASLAB.Services.ConnectionHelper.Cancel">
+            <summary>
+            Cancela a operação de conexão atual
+            </summary>
+        </member>
+        <member name="T:MASLAB.Services.ConnectionHelper.ConnectionCompletedHandler">
+            <summary>
+            Trata a finalização de uma conexão
+            </summary>
+            <param name="link">Link finalizado</param>
+        </member>
+        <member name="T:MASLAB.Services.ConnectionHelper.ConnectionStartedHandler">
+            <summary>
+            Trata o início de uma conexão
+            </summary>
+            <param name="c">Conexão de partida</param>
+        </member>
+        <member name="E:MASLAB.Services.ConnectionHelper.ConnectionCompleted">
+            <summary>
+            Evento de notificação disparado quando uma conexão
+            entre dois pontos está concluída
+            </summary>
+        </member>
+        <member name="E:MASLAB.Services.ConnectionHelper.ConnectionStarted">
+            <summary>
+            Disparado quando uma nova conexão é iniciada
+            </summary>
+        </member>
+        <member name="T:MASLAB.Services.ErrorService">
+            <summary>
+            Serviço de erros de compilação e análise de código
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.ErrorService.#ctor">
+            <summary>
+            Cria uma nova instância de ErrorService
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.ErrorService.GetService">
+            <summary>
+            Obtém a instância atual do serviço
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.ErrorService.AddRange(System.Collections.Generic.IEnumerable{MASLAB.Services.CompilationDiagnostic})">
+            <summary>
+            Adiciona uma coleção de erros
+            </summary>
+            <param name="errors">Coleção a ser adicionada</param>
+        </member>
+        <member name="M:MASLAB.Services.ErrorService.AddRange(System.Collections.Generic.IEnumerable{Microsoft.CodeAnalysis.Diagnostic})">
+            <summary>
+            Adiciona uma coleção de erros
+            </summary>
+            <param name="errors">Coleção a ser adicionada</param>
+        </member>
+        <member name="M:MASLAB.Services.ErrorService.Add(MASLAB.Services.CompilationDiagnostic)">
+            <summary>
+            Adiciona um erro 
+            </summary>
+            <param name="error">Erro a ser adicionado</param>
+        </member>
+        <member name="M:MASLAB.Services.ErrorService.Clear">
+            <summary>
+            Limpa a coleção de erros
+            </summary>
+        </member>
+        <member name="T:MASLAB.Services.LogService">
+            <summary>
+            Serviço de log da simulação
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.LogService.#ctor">
+            <summary>
+            Cria uma nova instância de LogService
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.LogService.GetService">
+            <summary>
+            Obtém a instância atual do serviço de Log
+            </summary>
+        </member>
+        <member name="P:MASLAB.Services.LogService.Data">
+            <summary>
+            Obtém o cojunto de dados do log da simulação
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.LogService.Log(System.String)">
+            <summary>
+            Escreve uma string no log da simulação
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.LogService.Clear">
+            <summary>
+            Limpa os dados do log da simulação
+            </summary>
+        </member>
+        <member name="T:MASLAB.Services.LogServiceData">
+            <summary>
+            Representa os dados do log da simulação
+            </summary>
+        </member>
+        <member name="P:MASLAB.Services.LogServiceData.Log">
+            <summary>
+            Obtém a string de log da simulação
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.LogServiceData.Add(System.String)">
+            <summary>
+            Inclui uma nova string no log
+            </summary>
+            <param name="value">string a ser incluída no log</param>
+        </member>
+        <member name="M:MASLAB.Services.LogServiceData.Clear">
+            <summary>
+            Limpa os dados do log
+            </summary>
+        </member>
+        <member name="E:MASLAB.Services.LogServiceData.PropertyChanged">
+            <summary>
+            Notifica a alteração de uma propriedade
+            </summary>
+        </member>
+        <member name="T:MASLAB.Services.TextMarkerService">
+            <summary>
+            Handles the text markers for a code editor.
+            </summary>
+        </member>
+        <member name="M:MASLAB.Services.TextMarkerService.#ctor(AvaloniaEdit.Document.TextDocument)">
+            <summary>
+            Cria uma nova instância de TextMarkerService
+            </summary>
+            <param name="document"></param>
+        </member>
+        <member name="M:MASLAB.Services.TextMarkerService.Redraw(AvaloniaEdit.Document.ISegment)">
+            <summary>
+            Redraws the specified text segment.
+            </summary>
+        </member>
+        <member name="T:MASLAB.ViewModels.MainWindowViewModel">
+            <summary>
+            ViewModel responsável por controlar a MainWindow
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.#ctor">
+            <summary>
+            Cria uma nova instância de MainWindowViewModel
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.Project">
+            <summary>
+            Obtém ou define a estrutura do projeto
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.Simulator">
+            <summary>
+            Obtem a instância do simulador de tempo
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.OpenCommand">
+            <summary>
+            Obtém o comando para abrir um arquivo de projeto
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.SaveCommand">
+            <summary>
+            Obtém o comando para salvar um projeto
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.StartCommand">
+            <summary>
+            Obtém o comando de partida/início do simulador
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.PauseCommand">
+            <summary>
+            Obtém o comando de pausa do simulador
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.StopCommand">
+            <summary>
+            Obtém o comando de parada do simulador
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.ShowTankPropertiesCommand">
+            <summary>
+            Obtém o comando de exibição da janela de propriedades dos tanques
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.RemovePipeCommand">
+            <summary>
+            Obtém o comando de remoção dos canos que conectam os tanques
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.AddLevelCommand">
+            <summary>
+            Obtém o comando de adicionar novos níveis
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.ExportCommand">
+            <summary>
+            Obtém o comando para exportar um diagrama
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.SimulationSettingsCommand">
+            <summary>
+            Obtém o comando para exibir a janela de configurações da simulação
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.RefreshChartCommand">
+            <summary>
+            Obtém o comando para redefinir os eixos do gráfico
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.ChartZoomInCommand">
+            <summary>
+            Obtém o comando para aplicar zoom ao gráfico
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.ChartZoomOutCommand">
+            <summary>
+            obtém o comando para remover o zoom do gráfico
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.AboutCommand">
+            <summary>
+            Obtém o comando para abrir o sobre o software
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.IsAboutOpen">
+            <summary>
+            Determina se a janela "Sobre" está aberta
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.LinkEnabled">
+            <summary>
+            Determina se a adição de novas conexões está habilitado
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.PointCollection">
+            <summary>
+            Obtém a lista de pontos da conexão atual
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.MainWindowViewModel.SelectedTabIndex">
+            <summary>
+            Obtém ou define o índice da aba selecionada
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.Open">
+            <summary>
+            Método utilizado para abrir um projeto
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.OpenFile(System.String)">
+            <summary>
+            Método utilizado para abrir um arquivo de projeto
+            </summary>
+            <param name="file">Caminho para o arquivo</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.Save">
+            <summary>
+            Método utilizado para salvar um projeto
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.SaveProjectFile(System.String)">
+            <summary>
+            Salva um arquivo do projeto desenvolvido
+            </summary>
+            <param name="filename">Caminho para o arquivo</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.OnSimulationTick(System.Object,Simulation.SimulationTickEventArgs)">
+            <summary>
+            Método chamado a cada TIC do simulador
+            </summary>
+            <param name="sender">Instância do simulador</param>
+            <param name="e">Parâmetros do simulador</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.UpdateCommands">
+            <summary>
+            Atualiza os comandos do simulador
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.OnConnectionStarted(MASL.Controls.DataModel.Connection)">
+            <summary>
+            Trata os eventos de início de conexão entre tanques
+            </summary>
+            <param name="c">Dados da conexão</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.OnConnectionCompleted(MASL.Controls.DataModel.Link)">
+            <summary>
+            Trata a finalização de conexões entre tanques
+            </summary>
+            <param name="l">Dados da conexão entre dois tanques</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.Export(System.Object)">
+            <summary>
+            Método utilizado para exportar a aba aberta do diagrama para 
+            um arquivo de imagem PNG
+            </summary>
+            <param name="control">Controle de origem</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.ExportPng(System.Object,System.String)">
+            <summary>
+            Exporta um arquivo de imagem para o controle informado
+            </summary>
+            <param name="control">Controle a ser renderizado</param>
+            <param name="filename">Caminho para o arquivo</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.ExportMatFile(System.String)">
+            <summary>
+            Salva um arquivo com os dados do gráfico no formato
+            do matlab
+            </summary>
+            <param name="filename">Caminho para o arquivo</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.MainWindowViewModel.ExportCsvFile(System.String)">
+            <summary>
+            Exporta o conjunto de dados do gráfico para o formato csv
+            </summary>
+            <param name="filename">Caminho para o arquivo</param>
+        </member>
+        <member name="T:MASLAB.ViewModels.SimulationSettingsViewModel">
+            <summary>
+            Representa a ViewModel da janela de configurações da simulação
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.SimulationSettingsViewModel.Duration">
+            <summary>
+            Duração da simulação
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.SimulationSettingsViewModel.Interval">
+            <summary>
+            Intervalo entre chamadas de método
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.SimulationSettingsViewModel.DurationString">
+            <summary>
+            String formatada de tempo de duração
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.SimulationSettingsViewModel.IntervalString">
+            <summary>
+            String formatada de tempo de intervalo
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.SimulationSettingsViewModel.IsRealTime">
+            <summary>
+            Determina o tipo de simulação
+            </summary>
+        </member>
+        <member name="T:MASLAB.ViewModels.TankViewModel">
+            <summary>
+            Representa a ViewModel do Tanque
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.TankViewModel.#ctor">
+            <summary>
+            Cria uma nova instância de TankViewModel
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.TankViewModel.InputConnectionCommand">
+            <summary>
+            Especifica o comando para conexões de entrada do tanque
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.TankViewModel.OutputConnectionCommand">
+            <summary>
+            Especifica o comando para conexões de saída do tanque
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.TankViewModel.ParentContainer">
+            <summary>
+            Especifica o controle pai que contém o diagrama
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.TankViewModel.CurrentPoint">
+            <summary>
+            Representa a posição atual do mouse em relação ao controle pai
+            </summary>
+        </member>
+        <member name="P:MASLAB.ViewModels.TankViewModel.Tank">
+            <summary>
+            Representa o objeto de dados do tanque atual
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.TankViewModel.InputConnectionRequested(System.Object)">
+            <summary>
+            Trata as requisições de conexões de entrada
+            </summary>
+            <param name="p">Parâmetro especificado no DataBinding</param>
+        </member>
+        <member name="M:MASLAB.ViewModels.TankViewModel.OutputConnectionRequested(System.Object)">
+            <summary>
+            Trata as Requisições de conexões de saída
+            </summary>
+            <param name="p">Parâmetro especificado no DataBinding</param>
+        </member>
+        <member name="T:MASLAB.ViewModels.ViewModelBase">
+            <summary>
+            Representa a classe base de ViewModels
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.ConnectorControl">
+            <summary>
+            Controle de conexão entre tanques
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.ConnectorControl.#ctor">
+            <summary>
+            Cria uma nova instância de ConnectorControl
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.ConnectorControl.OnTemplateApplied(Avalonia.Controls.Primitives.TemplateAppliedEventArgs)">
+            <summary>
+            Método invocado quando o template XAML é aplicado
+            </summary>
+            <param name="e">Argumentos do template</param>
+        </member>
+        <member name="F:MASLAB.Views.ConnectorControl.PointsProperty">
+            <summary>
+            Conjuntos de pontos desenhado
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.ConnectorControl.Points">
+            <summary>
+            Conjunto de pontos desenhado
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.ConnectorControl.ParentWindowProperty">
+            <summary>
+            Representa a janela pai do controle
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.ConnectorControl.ParentWindow">
+            <summary>
+            Representa a janela pai do controle
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.ConnectorControl.IsLinkEnabledProperty">
+            <summary>
+            Determina se a interação está habilitada
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.ConnectorControl.IsLinkEnabled">
+            <summary>
+            Determina se a interação está habilitada
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.MainWindow">
+            <summary>
+            Janela principal do software
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.MainWindow.#ctor">
+            <summary>
+            Cria uma nova instância de MainWindow
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.MessageBox">
+            <summary>
+            Representa uma janela de diálogo
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.MessageBox.#ctor">
+            <summary>
+            Cria uma nova instância de MessageBox
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.MessageBox.MessageBoxButtons">
+            <summary>
+            Representa os botões do diálogo MessageBox
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxButtons.Ok">
+            <summary>
+            Ok
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxButtons.OkCancel">
+            <summary>
+            Ok e Cancelar
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxButtons.YesNo">
+            <summary>
+            Sim e não
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxButtons.YesNoCancel">
+            <summary>
+            Sim, não e cancelar
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.MessageBox.MessageBoxResult">
+            <summary>
+            Resultado do diálogo MessageBox
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxResult.Ok">
+            <summary>
+            Ok
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxResult.Cancel">
+            <summary>
+            Cancelado
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxResult.Yes">
+            <summary>
+            Sim
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.MessageBox.MessageBoxResult.No">
+            <summary>
+            Não
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.MessageBox.Show(System.String,System.String,MASLAB.Views.MessageBox.MessageBoxButtons)">
+            <summary>
+            Exibe a janela de diálogo
+            </summary>
+            <param name="text">Texto a ser exibido</param>
+            <param name="title">Título da janela</param>
+            <param name="buttons">Botões do diálogo</param>
+            <returns>Botão clicado pelo usuário</returns>
+        </member>
+        <member name="T:MASLAB.Views.SimulationSettings">
+            <summary>
+            Representa a janela de configurações da simulação
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.SimulationSettings.#ctor">
+            <summary>
+            Cria uma nova instância de SimulationSettings
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.SimulationSettings.ViewModel">
+            <summary>
+            ViewModel de SimulationSettings
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.Tank">
+            <summary>
+            Representa um tanque do Diagrama
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.Tank.#ctor">
+            <summary>
+            Cria uma nova instância de Tank
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.Tank.ViewModel">
+            <summary>
+            Determina a ViewModel do Tank
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.Tank.ParentContainerProperty">
+            <summary>
+            Determina do controle Pai de Tank
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.Tank.ParentContainer">
+            <summary>
+            Determina do controle Pai de Tank
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.Tank.TankDataProperty">
+            <summary>
+            Representa o modelo de dados de Tank
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.Tank.TankData">
+            <summary>
+            Representa o modelo de dados de Tank
+            </summary>
+        </member>
+        <member name="F:MASLAB.Views.Tank.LevelProperty">
+            <summary>
+            Representa o nível do tanque
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.Tank.Level">
+            <summary>
+            Representa o nível do tanque
+            </summary>
+        </member>
+        <member name="T:MASLAB.Views.TankProperties">
+            <summary>
+            Representa a janela de propriedades de um tanque
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.TankProperties.#ctor">
+            <summary>
+            Cria uma nova instância de TankProperties
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.TankProperties.UndoCommand">
+            <summary>
+            Comando de Desfazer
+            </summary>
+        </member>
+        <member name="P:MASLAB.Views.TankProperties.RedoCommand">
+            <summary>
+            Comando de Refazer
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.TankProperties.SetTank(MASL.Controls.DataModel.Tank)">
+            <summary>
+            Atribui o tanque associado ao controle
+            </summary>
+            <param name="t">Modelo do tanque da simulação</param>
+            <returns>Instância de TankProperties</returns>
+        </member>
+        <member name="M:MASLAB.Views.TankProperties.OnClosing(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Método chamado quando a janela está se fechando
+            </summary>
+            <param name="e">Parâmetros do evento</param>
+        </member>
+        <member name="T:ICSharpCode.AvalonEdit.Folding.BraceFoldingStrategy">
+            <summary>
+            Allows producing foldings from a document based on braces.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.AvalonEdit.Folding.BraceFoldingStrategy.OpeningBrace">
+            <summary>
+            Gets/Sets the opening brace. The default value is '{'.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.AvalonEdit.Folding.BraceFoldingStrategy.ClosingBrace">
+            <summary>
+            Gets/Sets the closing brace. The default value is '}'.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.AvalonEdit.Folding.BraceFoldingStrategy.#ctor">
+            <summary>
+            Creates a new BraceFoldingStrategy.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.AvalonEdit.Folding.BraceFoldingStrategy.CreateNewFoldings(AvaloniaEdit.Document.TextDocument,System.Int32@)">
+            <summary>
+            Create <see cref="T:AvaloniaEdit.Folding.NewFolding"/>s for the specified document.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.AvalonEdit.Folding.BraceFoldingStrategy.CreateNewFoldings(AvaloniaEdit.Document.ITextSource)">
+            <summary>
+            Create <see cref="T:AvaloniaEdit.Folding.NewFolding"/>s for the specified document.
+            </summary>
+        </member>
+        <member name="T:ICSharpCode.SharpDevelop.Editor.ITextMarker">
+            <summary>
+            Represents a text marker.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.StartOffset">
+            <summary>
+            Gets the start offset of the marked text region.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.EndOffset">
+            <summary>
+            Gets the end offset of the marked text region.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.Length">
+            <summary>
+            Gets the length of the marked region.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.SharpDevelop.Editor.ITextMarker.Delete">
+            <summary>
+            Deletes the text marker.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.IsDeleted">
+            <summary>
+            Gets whether the text marker was deleted.
+            </summary>
+        </member>
+        <member name="E:ICSharpCode.SharpDevelop.Editor.ITextMarker.Deleted">
+            <summary>
+            Event that occurs when the text marker is deleted.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.BackgroundColor">
+            <summary>
+            Gets/Sets the background color.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.ForegroundColor">
+            <summary>
+            Gets/Sets the foreground color.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.FontWeight">
+            <summary>
+            Gets/Sets the font weight.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.FontStyle">
+            <summary>
+            Gets/Sets the font style.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.MarkerTypes">
+            <summary>
+            Gets/Sets the type of the marker. Use TextMarkerType.None for normal markers.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.MarkerColor">
+            <summary>
+            Gets/Sets the color of the marker.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.Tag">
+            <summary>
+            Gets/Sets an object with additional data for this text marker.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarker.ToolTip">
+            <summary>
+            Gets/Sets an object that will be displayed as tooltip in the text editor.
+            </summary>
+            <remarks>Not supported in this sample!</remarks>
+        </member>
+        <member name="T:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes">
+            <summary>
+            Editor Text Marker Types
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.None">
+            <summary>
+            Use no marker
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.SquigglyUnderline">
+            <summary>
+            Use squiggly underline marker
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.NormalUnderline">
+            <summary>
+            Normal underline.
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.DottedUnderline">
+            <summary>
+            Dotted underline.
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.LineInScrollBar">
+            <summary>
+            Horizontal line in the scroll bar.
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.ScrollBarRightTriangle">
+            <summary>
+            Small triangle in the scroll bar, pointing to the right.
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.ScrollBarLeftTriangle">
+            <summary>
+            Small triangle in the scroll bar, pointing to the left.
+            </summary>
+        </member>
+        <member name="F:ICSharpCode.SharpDevelop.Editor.TextMarkerTypes.CircleInScrollBar">
+            <summary>
+            Small circle in the scroll bar.
+            </summary>
+        </member>
+        <member name="T:ICSharpCode.SharpDevelop.Editor.ITextMarkerService">
+            <summary>
+            Text Marker Service Interface
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.SharpDevelop.Editor.ITextMarkerService.Create(System.Int32,System.Int32)">
+            <summary>
+            Creates a new text marker. The text marker will be invisible at first,
+            you need to set one of the Color properties to make it visible.
+            </summary>
+        </member>
+        <member name="P:ICSharpCode.SharpDevelop.Editor.ITextMarkerService.TextMarkers">
+            <summary>
+            Gets the list of text markers.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.SharpDevelop.Editor.ITextMarkerService.Remove(ICSharpCode.SharpDevelop.Editor.ITextMarker)">
+            <summary>
+            Removes the specified text marker.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.SharpDevelop.Editor.ITextMarkerService.RemoveAll(System.Predicate{ICSharpCode.SharpDevelop.Editor.ITextMarker})">
+            <summary>
+            Removes all text markers that match the condition.
+            </summary>
+        </member>
+        <member name="M:ICSharpCode.SharpDevelop.Editor.ITextMarkerService.GetMarkersAtOffset(System.Int32)">
+            <summary>
+            Finds all text markers at the specified offset.
+            </summary>
+        </member>
+        <member name="T:Device.DeviceEventArgs">
+            <summary>
+            Representa um evento relacionado a um dispositivo
+            </summary>
+        </member>
+        <member name="P:Device.DeviceEventArgs.Relay">
+            <summary>
+            Representa um relé do dispositivo
+            </summary>
+        </member>
+        <member name="P:Device.DeviceEventArgs.State">
+            <summary>
+            Representa o estado do dispositivo
+            </summary>
+        </member>
+        <member name="T:Device.DeviceState">
+            <summary>
+            Representa o estado do dispositivo
+            </summary>
+        </member>
+        <member name="F:Device.DeviceState.Off">
+            <summary>
+            Representa o dispositivo como LIGADO
+            </summary>
+        </member>
+        <member name="F:Device.DeviceState.On">
+            <summary>
+            Representa o dispositivo como DESLIGADO
+            </summary>
+        </member>
+        <member name="T:Device.InstructionType">
+            <summary>
+            Representa as operações válidas para o dispositivo
+            </summary>
+        </member>
+        <member name="F:Device.InstructionType.ReadSetting">
+            <summary>
+            Função de configuração da leitura no dispositivo
+            </summary>
+        </member>
+        <member name="F:Device.InstructionType.DelaySetting">
+            <summary>
+            Função de configuração do intervalo de tempo entre leituras
+            </summary>
+        </member>
+        <member name="F:Device.InstructionType.SensorRead">
+            <summary>
+            Função de leitura de sensores
+            </summary>
+        </member>
+        <member name="F:Device.InstructionType.RelayPower">
+            <summary>
+            Função de acionamento de relés
+            </summary>
+        </member>
+        <member name="F:Device.InstructionType.RelayStatus">
+            <summary>
+            Função de leitura de estado dos relés
+            </summary>
+        </member>
+        <member name="T:Device.ReadMode">
+            <summary>
+            Representa o modo de leitura do dispositivo
+            </summary>
+        </member>
+        <member name="F:Device.ReadMode.Controlled">
+            <summary>
+            Modo controlado. O dispositivo envia leitura somente quando solicitado
+            </summary>
+        </member>
+        <member name="F:Device.ReadMode.Continuous">
+            <summary>
+            Modo contínuo. O dispositivo envia leituras continuamente.
+            </summary>
+        </member>
+        <member name="T:Device.Relays">
+            <summary>
+            Define os relés do dispositivo
+            </summary>
+        </member>
+        <member name="F:Device.Relays.Relay1">
+            <summary>
+            Relé 1
+            </summary>
+        </member>
+        <member name="F:Device.Relays.Relay2">
+            <summary>
+            Relé 2
+            </summary>
+        </member>
+        <member name="F:Device.Relays.Relay3">
+            <summary>
+            Relé 3
+            </summary>
+        </member>
+        <member name="F:Device.Relays.Relay4">
+            <summary>
+            Relé 4
+            </summary>
+        </member>
+        <member name="T:Device.SensorEventArgs">
+            <summary>
+            Representa um evento relacionado a um sensor do dispositivo
+            </summary>
+        </member>
+        <member name="P:Device.SensorEventArgs.Sensor">
+            <summary>
+            Representa o sensor de origem do evento
+            </summary>
+        </member>
+        <member name="P:Device.SensorEventArgs.Data">
+            <summary>
+            Representa o dado lido pelo sensor
+            </summary>
+        </member>
+        <member name="T:Device.Sensors">
+            <summary>
+            Representa um sensor do dispositivo
+            </summary>
+        </member>
+        <member name="F:Device.Sensors.Sensor1">
+            <summary>
+            Sensor 1
+            </summary>
+        </member>
+        <member name="F:Device.Sensors.Sensor2">
+            <summary>
+            Sensor 2
+            </summary>
+        </member>
+        <member name="F:Device.Sensors.Sensor3">
+            <summary>
+            Sensor 3
+            </summary>
+        </member>
+        <member name="F:Device.Sensors.Sensor4">
+            <summary>
+            Sensor 4
+            </summary>
+        </member>
+        <member name="T:Device.SerialDevice">
+            <summary>
+            Controla dispositivos seriais do mundo real
+            </summary>
+        </member>
+        <member name="M:Device.SerialDevice.#ctor(System.String)">
+            <summary>
+            Cria uma novav instância de SerialDevice
+            </summary>
+            <param name="portName">Nome da porta serial</param>
+        </member>
+        <member name="M:Device.SerialDevice.Open">
+            <summary>
+            Abre a conexão da porta serial
+            </summary>
+        </member>
+        <member name="M:Device.SerialDevice.Close">
+            <summary>
+            Fecha a conexão da porta serial
+            </summary>
+        </member>
+        <member name="M:Device.SerialDevice.ConfigureReadMode(Device.ReadMode)">
+            <summary>
+            Configura o modo de leitura do dispositivo
+            </summary>
+            <param name="mode">Modo de leitura</param>
+        </member>
+        <member name="M:Device.SerialDevice.ConfigureDelay(System.Byte)">
+            <summary>
+            Configura o intervalo de tempo entre leituras
+            </summary>
+            <param name="delay">Intevalo de tempo</param>
+        </member>
+        <member name="M:Device.SerialDevice.RequestSensorData(Device.Sensors)">
+            <summary>
+            Solicita ao dispositivo o envio de dados quando configurado 
+            no modo Controlled
+            </summary>
+            <param name="sensor">Sensor</param>
+        </member>
+        <member name="M:Device.SerialDevice.RequestRelayState(Device.Relays)">
+            <summary>
+            Solicita ao dispositivo o estado atual de um Relé
+            </summary>
+            <param name="relay">Relé</param>
+        </member>
+        <member name="M:Device.SerialDevice.SetRelayState(Device.Relays,Device.DeviceState)">
+            <summary>
+            Ativa ou desativa um relé no dispositivo
+            </summary>
+            <param name="relay">Relé</param>
+            <param name="state">Estado</param>
+        </member>
+        <member name="M:Device.SerialDevice.Dispose">
+            <summary>
+            Destroi a conexão da porta serial.
+            </summary>
+        </member>
+        <member name="E:Device.SerialDevice.SensorDataReceived">
+            <summary>
+            Notifica a recepção de dados por parte do dispositivo.
+            </summary>
+        </member>
+        <member name="T:MASL.Controls.DataModel.Connection">
+            <summary>
+            Representa uma das conexões de um tanque
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Connection.Position">
+            <summary>
+            Representa a coordenada da conexão do tanque
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Connection.ConnectionType">
+            <summary>
+            Representa o tipo de conexão do tanque: Entrada ou saída.
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Connection.Tank">
+            <summary>
+            Representa o tanque de origem da conexão
+            </summary>
+        </member>
+        <member name="E:MASL.Controls.DataModel.Connection.PropertyChanged">
+            <summary>
+            Notifica uma alteração ocorrida em uma propriedade da classe
+            </summary>
+        </member>
+        <member name="T:MASL.Controls.DataModel.ConnectionType">
+            <summary>
+            Representa o tipo de conexão em um tanque
+            </summary>
+        </member>
+        <member name="F:MASL.Controls.DataModel.ConnectionType.Input">
+            <summary>
+            Conexão de entrada
+            </summary>
+        </member>
+        <member name="F:MASL.Controls.DataModel.ConnectionType.Output">
+            <summary>
+            Conexão de saída
+            </summary>
+        </member>
+        <member name="T:MASL.Controls.DataModel.Level">
+            <summary>
+            Representa um nível da simulação
+            </summary>
+        </member>
+        <member name="M:MASL.Controls.DataModel.Level.#ctor(MASL.Controls.DataModel.Project)">
+            <summary>
+            Cria uma nova instância de Level
+            </summary>
+            <param name="parent">Projeto pai do Level</param>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Level.Items">
+            <summary>
+            Representa a coleção de tanques individuais de cada nível
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Level.Name">
+            <summary>
+            Representa o nome do nível
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Level.AddCommand">
+            <summary>
+            Representa um comando de adição
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Level.Project">
+            <summary>
+            Projeto pai do Level
+            </summary>
+        </member>
+        <member name="E:MASL.Controls.DataModel.Level.PropertyChanged">
+            <summary>
+            Notifica uma alteração ocorrida em uma propriedade da classe
+            </summary>
+        </member>
+        <member name="T:MASL.Controls.DataModel.Link">
+            <summary>
+            Representa a conexão entre dois tanques
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Link.Target">
+            <summary>
+            Representa a conexão de origem entre dois tanques
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Link.Origin">
+            <summary>
+            Representa a conexão de destino entre dois tanques
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Link.Points">
+            <summary>
+            Representa o conjunto de pontos da ligação
+            </summary>
+        </member>
+        <member name="E:MASL.Controls.DataModel.Link.PropertyChanged">
+            <summary>
+            Notifica uma alteração ocorrida em uma propriedade da classe
+            </summary>
+        </member>
+        <member name="T:MASL.Controls.DataModel.Project">
+            <summary>
+            Representa um diagrama criado no software
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Project.Levels">
+            <summary>
+            Representa os níveis físicos (andares) que contêm os tanques
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Project.Connections">
+            <summary>
+            Representa as conexões entre tanques
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Project.ProjectName">
+            <summary>
+            Representa o nome do projeto
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Project.Author">
+            <summary>
+            Representa o nome do Autor do projeto
+            </summary>
+        </member>
+        <member name="E:MASL.Controls.DataModel.Project.PropertyChanged">
+            <summary>
+            Notifica a alteração de propriedades da classe.
+            </summary>
+        </member>
+        <member name="T:MASL.Controls.DataModel.Tank">
+            <summary>
+            Representa um tanque no modelo
+            </summary>
+        </member>
+        <member name="M:MASL.Controls.DataModel.Tank.#ctor(MASL.Controls.DataModel.Level)">
+            <summary>
+            Cria uma nova instância de Tank
+            </summary>
+            <param name="parent">Nível pai do Tank</param>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Tank.Parent">
+            <summary>
+            Representa o Nível que o tanque ocupa
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Tank.TankLevel">
+            <summary>
+            Representa o nível do tanque atual
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Tank.Output">
+            <summary>
+            Saída calculada na simulação
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Tank.SimulationCode">
+            <summary>
+            Representa o código da simulação escrito no editor de texto
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Tank.RemoveCommand">
+            <summary>
+            Representa o comando de remoção do tanque
+            </summary>
+        </member>
+        <member name="P:MASL.Controls.DataModel.Tank.SimulationTank">
+            <summary>
+            Representa a instância compilada do código da simulação
+            </summary>
+        </member>
+        <member name="M:MASL.Controls.DataModel.Tank.Compile">
+            <summary>
+            Método de compilação do código da simulação
+            </summary>
+            <returns>Instância da classe de simulação escrita no editor de texto</returns>
+        </member>
+        <member name="M:MASL.Controls.DataModel.Tank.UpdateTank(System.TimeSpan,System.TimeSpan,System.Double,System.Double)">
+            <summary>
+            Atualiza o estado do tanque para o instante atual de tempo
+            </summary>
+            <param name="currentTime">Instante atual de tempo</param>
+            <param name="interval">Intervalo entre chamadas de função</param>
+            <param name="input1">Entrada 1 do tanque</param>
+            <param name="input2">Entrada 2 do tanque</param>
+        </member>
+        <member name="E:MASL.Controls.DataModel.Tank.PropertyChanged">
+            <summary>
+            Notifica uma alteração ocorrida em uma propriedade da classe
+            </summary>
+        </member>
+        <member name="T:Simulation.SimulationData">
+            <summary>
+            Representa os dados retornados pelo metodo
+            de atualização da simulação
+            </summary>
+        </member>
+        <member name="M:Simulation.SimulationData.#ctor">
+            <summary>
+            Cria uma nova instância de SimulationData
+            </summary>
+        </member>
+        <member name="M:Simulation.SimulationData.#ctor(System.Double,System.Double)">
+            <summary>
+            Cria uma nova instância de SimulationData
+            </summary>
+            <param name="level">Nível calculado</param>
+            <param name="output">Vazão calculada</param>
+        </member>
+        <member name="P:Simulation.SimulationData.Level">
+            <summary>
+            Representa o nível do tanque calculado na simulação
+            </summary>
+        </member>
+        <member name="P:Simulation.SimulationData.Output">
+            <summary>
+            Representa a vazão do tanque calculada da simulação
+            </summary>
+        </member>
+        <member name="T:Simulation.SimulationTank">
+            <summary>
+            Representa as funções do código individual dos tanques
+            </summary>
+        </member>
+        <member name="P:Simulation.SimulationTank.TankArea">
+            <summary>
+            Area da base do tanque
+            </summary>
+        </member>
+        <member name="P:Simulation.SimulationTank.Level">
+            <summary>
+            Altura do tanque
+            </summary>
+        </member>
+        <member name="P:Simulation.SimulationTank.ValveConstant">
+            <summary>
+            Constante da válvula
+            </summary>
+        </member>
+        <member name="M:Simulation.SimulationTank.OnSimulationStarting">
+            <summary>
+            Método chamado antes da simulação iniciar.
+            Pode ser utilizado para inicialização de variáveis
+            </summary>
+        </member>
+        <member name="M:Simulation.SimulationTank.OnUpdate(System.TimeSpan,System.TimeSpan,System.Double,System.Double)">
+            <summary>
+            Método chamado a cada atualização das entradas do tanque
+            </summary>
+            <param name="time">Parâmetro de tempo</param>
+            <param name="input1">Entrada 1 do tanque</param>
+            <param name="input2">Entrada 2 do tanque</param>
+            <param name="simulationStep">Intervalo de tempo entre chamadas de método</param>
+            <returns>Saída calculada para o tanque</returns>
+        </member>
+        <member name="M:Simulation.SimulationTank.RungeKutta4(System.Double,System.Double,System.Double,System.Func{System.Double,System.Double,System.Double})">
+            <summary>
+            Método Runge Kutta de Quarta ordem para equações diferenciais
+            </summary>
+            <param name="y0">Valor Inicial</param>
+            <param name="start">Tempo Inicial</param>
+            <param name="end">Tempo Final</param>
+            <param name="dydx">Equação diferencial a ser calculada</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simulation.SimulationTank.RungeKutta2(System.Double,System.Double,System.Double,System.Func{System.Double,System.Double,System.Double})">
+            <summary>
+            Método Runge Kutta de Segunda ordem para equações diferenciais
+            </summary>
+            <param name="y0">Valor Inicial</param>
+            <param name="start">Tempo Inicial</param>
+            <param name="end">Tempo Final</param>
+            <param name="dydx">Equação diferencial a ser calculada</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simulation.SimulationTank.Plot(System.String,System.TimeSpan,System.Double)">
+            <summary>
+            Plota um ponto no gráfico para a série definida
+            </summary>
+            <param name="serie">Nome da série</param>
+            <param name="time">Instante de tempo da série</param>
+            <param name="value">Valor a ser plotado</param>
+        </member>
+        <member name="M:Simulation.SimulationTank.Log(System.String)">
+            <summary>
+            Insere uma nova linha no log da simulação
+            </summary>
+            <param name="value">valor a ser inserido</param>
+        </member>
+        <member name="M:Simulation.SimulationTank.Log(System.TimeSpan,System.Object)">
+            <summary>
+            Insere uma nova linha no log da simulação
+            </summary>
+            <param name="time">Instante de tempo</param>
+            <param name="value">valor a ser inserido</param>
+        </member>
+        <member name="T:Simulation.SimulationTickEventArgs">
+            <summary>
+            Especifica o conjunto de parâmetros notificados
+            no evento de disparo do clock da simulação
+            </summary>
+        </member>
+        <member name="P:Simulation.SimulationTickEventArgs.CurrentTime">
+            <summary>
+            Tempo atual da simulação
+            </summary>
+        </member>
+        <member name="T:Simulation.SimulationType">
+            <summary>
+            Especifica o tipo de simulação a ser executada
+            </summary>
+        </member>
+        <member name="F:Simulation.SimulationType.Transient">
+            <summary>
+            Executa uma simulação instantânea para um intervalo de
+            tempo especificado.
+            </summary>
+        </member>
+        <member name="F:Simulation.SimulationType.RealTime">
+            <summary>
+            Executa a simulação em tempo real até que o usuário
+            pause ou interrompa a simulação.
+            </summary>
+        </member>
+        <member name="T:Simulation.Simulator">
+            <summary>
+            Classe responsável por controlar os gatilhos de tempo
+            para os parâmetros de simulação especificados
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.IsRunning">
+            <summary>
+            Determina se a simulação está em andamento
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.IsPaused">
+            <summary>
+            Determina se a simulação está em pausa
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.IsStoped">
+            <summary>
+            Determina se a simulação está parada
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.SimulationType">
+            <summary>
+            Determina o tipo de simulação a ser executada
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.SimulationDuration">
+            <summary>
+            Determina a duração da simulação transiente
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.SimulationInterval">
+            <summary>
+            Determina o intervalo entre os eventos de tempo
+            </summary>
+        </member>
+        <member name="P:Simulation.Simulator.SimulationTime">
+            <summary>
+            Obtém o instante atual da simulação
+            </summary>
+        </member>
+        <member name="M:Simulation.Simulator.Start">
+            <summary>
+            Inicia a simulação
+            </summary>
+        </member>
+        <member name="M:Simulation.Simulator.Pause">
+            <summary>
+            Pausa a simulação
+            </summary>
+        </member>
+        <member name="M:Simulation.Simulator.Stop">
+            <summary>
+            Para a simulação e zera o tempo de simulação
+            </summary>
+        </member>
+        <member name="E:Simulation.Simulator.PropertyChanged">
+            <summary>
+            Notifica uma alteração de proriedade da classe
+            </summary>
+        </member>
+        <member name="E:Simulation.Simulator.Tick">
+            <summary>
+            Notifica um disparo de tempo
+            </summary>
+        </member>
+    </members>
+</doc>

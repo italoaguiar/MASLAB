@@ -5,6 +5,9 @@ using ReactiveUI;
 
 namespace MASLAB.ViewModels
 {
+    /// <summary>
+    /// Representa a ViewModel da janela de configurações da simulação
+    /// </summary>
     public class SimulationSettingsViewModel:ViewModelBase
     {
         TimeSpan duration = TimeSpan.FromSeconds(2);
@@ -13,18 +16,27 @@ namespace MASLAB.ViewModels
         string intervalString = "00:00:050";
         bool isRealTime = true;
 
+        /// <summary>
+        /// Duração da simulação
+        /// </summary>
         public TimeSpan Duration 
         { 
             get => duration;
             set => this.RaiseAndSetIfChanged(ref duration, value);
         }
 
+        /// <summary>
+        /// Intervalo entre chamadas de método
+        /// </summary>
         public TimeSpan Interval 
         { 
             get => interval;
             set => this.RaiseAndSetIfChanged(ref interval, value);
         }
 
+        /// <summary>
+        /// String formatada de tempo de duração
+        /// </summary>
         public string DurationString 
         { 
             get => durationString;
@@ -39,6 +51,9 @@ namespace MASLAB.ViewModels
             }
         }
 
+        /// <summary>
+        /// String formatada de tempo de intervalo
+        /// </summary>
         public string IntervalString 
         { 
             get => intervalString;
@@ -53,6 +68,9 @@ namespace MASLAB.ViewModels
             }
         }
 
+        /// <summary>
+        /// Determina o tipo de simulação
+        /// </summary>
         public bool IsRealTime 
         { 
             get => isRealTime;

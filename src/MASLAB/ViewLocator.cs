@@ -5,7 +5,7 @@ using MASLAB.ViewModels;
 
 namespace MASLAB
 {
-    public class ViewLocator : IDataTemplate
+    internal class ViewLocator : IDataTemplate
     {
         public bool SupportsRecycling => false;
 
