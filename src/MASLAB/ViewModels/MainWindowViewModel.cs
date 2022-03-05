@@ -17,6 +17,7 @@ using OxyPlot.Series;
 using MathNet.Numerics.Data.Matlab;
 using MathNet.Numerics.Data.Text;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace MASLAB.ViewModels
 {
@@ -475,33 +476,79 @@ namespace MASLAB.ViewModels
         /// </summary>
         /// <param name="sender">Instância do simulador</param>
         /// <param name="e">Parâmetros do simulador</param>
-        private void OnSimulationTick(object sender, SimulationTickEventArgs e)
+        private async void OnSimulationTick(object sender, SimulationTickEventArgs e)
         {
             try
             {
-                //obtém os tanques de todos os níveis
-                foreach (var t in Project.Levels.SelectMany(x => x.Items))
+                await Task.Run(async () =>
                 {
-                    //obtém as conexões de cada tanque
-                    var r = Project.Connections.Where(x => x.Target.Tank == t).ToArray();
-                    switch (r.Length)
+                    //obtém os tanques de todos os níveis
+                    foreach (var t in Project.Levels.SelectMany(x => x.Items))
                     {
-                        //o tanque tem duas conexões de entrada
-                        case 2:
-                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, r[0].Origin.Tank.Output, r[1].Origin.Tank.Output);
-                            break;
 
-                        //o tanque tem uma conexão de entrada
-                        case 1:
-                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, r[0].Origin.Tank.Output, 0);
-                            break;
 
-                        //o tanque não possui conexões de entrada
-                        case 0:
-                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, 0, 0);
-                            break;
+                        //obtém as conexões de cada tanque
+                        var r = Project.Connections.Where(x => x.Target.Tank == t || x.Origin.Tank == t).ToArray();
+
+                        double tl = 0; 
+                        double tr = 0; 
+                        double bl = 0;
+                        double br = 0;
+
+                        var tl_ = r.FirstOrDefault(x => x.Target.Tank == t && x.Type == LinkType.Unidiretional && x.Target.ConnectionPosition == ConnectionPosition.TopLeft);
+
+                        if (tl_?.Origin.ConnectionPosition == ConnectionPosition.BottomRight)
+                            tl = tl_.Origin.Tank.RightOutput;
+                        else
+                            tl = tl_?.Origin?.Tank?.LeftOutput ?? 0;
+
+                        var tr_ = r.FirstOrDefault(x => x.Target.Tank == t && x.Type == LinkType.Unidiretional && x.Target.ConnectionPosition == ConnectionPosition.TopRight);
+
+                        if (tr_?.Origin.ConnectionPosition == ConnectionPosition.BottomRight)
+                            tr = tr_.Origin.Tank.RightOutput;
+                        else
+                            tr = tr_?.Origin?.Tank?.LeftOutput ?? 0;
+
+
+
+                        var bl_ = r.FirstOrDefault(x =>
+                            x.Type == LinkType.Bidiretional &&
+                            ((x.Origin.Tank == t && x.Origin.ConnectionPosition == ConnectionPosition.BottomLeft) || (x.Target.Tank == t && x.Target.ConnectionPosition == ConnectionPosition.BottomLeft)));
+
+                        if (bl_?.Origin?.Tank != t)
+                            if(bl_?.Origin?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                bl = bl_?.Origin?.Tank?.RightOutput ?? 0;
+                            else
+                                bl = bl_?.Origin?.Tank?.LeftOutput ?? 0;
+                        else if (bl_?.Target?.Tank != t)
+                            if (bl_?.Target?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                bl = bl_?.Target?.Tank?.RightOutput ?? 0;
+                            else
+                                bl = bl_?.Target?.Tank?.LeftOutput ?? 0;
+
+                        var br_ = r.FirstOrDefault(x =>
+                            x.Type == LinkType.Bidiretional &&
+                            ((x.Origin.Tank == t && x.Origin.ConnectionPosition == ConnectionPosition.BottomRight) || (x.Target.Tank == t && x.Target.ConnectionPosition == ConnectionPosition.BottomRight)));
+
+                        if (br_?.Origin?.Tank != t)
+                            if (br_?.Origin?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                br = br_?.Origin?.Tank?.RightOutput ?? 0;
+                            else
+                                br = br_?.Origin?.Tank?.LeftOutput ?? 0;
+                        else if (br_?.Target?.Tank != t)
+                            if (br_?.Target?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                br = br_?.Target?.Tank?.RightOutput ?? 0;
+                            else
+                                br = br_?.Target?.Tank?.LeftOutput ?? 0;
+
+
+                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, tl, tr, bl, br);
+                        });
+
                     }
-                }
+                });
             }
             catch(Exception ex)
             {

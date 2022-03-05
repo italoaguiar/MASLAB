@@ -16,12 +16,22 @@ namespace MASLAB.Services
     {
         private CompilationService() { }
 
+        private static string assemblyDir = Path.GetDirectoryName(typeof(object).Assembly.Location);
+        private static string appDir = Path.GetDirectoryName(typeof(App).Assembly.Location);
         private static readonly IEnumerable<MetadataReference> DefaultReferences =
             new[]
             {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(App).Assembly.Location),
-                MetadataReference.CreateFromFile(Path.Combine(Path.GetDirectoryName(typeof(object).Assembly.Location), "System.Runtime.dll"))
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location, documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Runtime.Extensions.xml")),
+                MetadataReference.CreateFromFile(typeof(App).Assembly.Location, documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/MASLAB.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Runtime.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Runtime.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Private.Uri.dll")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "System.IO.Ports.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.IO.Ports.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "System.Text.Json.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Text.Json.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Net.Http.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Net.Http.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "MathNet.Numerics.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/MathNet.Numerics.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "FSharp.Core.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/FSharp.Core.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "FParsec.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/FParsec.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(appDir, "FParsecCS.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/FParsecCS.xml")),
             };
 
 

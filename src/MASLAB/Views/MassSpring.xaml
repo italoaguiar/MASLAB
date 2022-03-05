@@ -1,0 +1,66 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:local="clr-namespace:MASLAB.Views;assembly=MASLAB"
+             x:Class="MASLAB.Views.MassSpring">
+  <Grid ColumnDefinitions="32,*" RowDefinitions="*,32" Margin="25">
+    <Grid>
+      <Grid.Background>
+        <VisualBrush TileMode="Tile"
+                    SourceRect="0,0,32,32"
+                    DestinationRect="0,0,32,32">
+          <VisualBrush.Visual>
+            <Image Source="avares://MASLAB/Assets/bricksx64.png"/>
+          </VisualBrush.Visual>
+        </VisualBrush>
+      </Grid.Background>
+    </Grid>
+    <Grid Grid.Row="1" Grid.ColumnSpan="2">
+      <Grid.Background>
+        <VisualBrush TileMode="Tile"
+                    SourceRect="0,0,32,32"
+                    DestinationRect="0,0,32,32">
+          <VisualBrush.Visual>
+            <Image Source="avares://MASLAB/Assets/bricksx64.png"/>
+          </VisualBrush.Visual>
+        </VisualBrush>
+      </Grid.Background>
+    </Grid>
+    <Grid Grid.Column="1">
+      <Slider Minimum="70" Maximum="200" x:Name="sl"/>
+      <StackPanel VerticalAlignment="Bottom">
+        <StackPanel Orientation="Horizontal">
+          <!--<Button Background="#33B6DB4F" BorderBrush="#337D9931">
+            <Button.Styles>
+              <Style Selector="Button">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                      <Border x:Name="border" Width="35" Height="35" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="30">
+                        <Path Width="18" Height="18" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 2.4,7.36L 7.36,7.36L 7.36,2.4L 8.64,2.4L 8.64,7.36L 13.6,7.36L 13.6,8.64L 8.64,8.64L 8.64,13.6L 7.36,13.6L 7.36,8.64L 2.4,8.64L 2.4,7.36 Z "/>
+                      </Border>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+              <Style Selector="Button:pointerover /template/ Border#border">
+                <Setter Property="Background" Value="#FFB6DB4F"/>
+                <Setter Property="BorderBrush" Value="#FF7D9931"/>
+              </Style>
+              <Style Selector="Button:pressed  /template/ Border#border">
+                <Setter Property="Background" Value="#FF95B53C"/>
+              </Style>
+            </Button.Styles>
+          </Button>-->
+          
+          <local:Spring Width="{Binding Value, ElementName=sl}"/>
+          <Border Background="#e3b022" Width="100" Height="100"/>
+        </StackPanel>
+        
+      </StackPanel>
+      <local:Spring IsVisible="False" VerticalAlignment="Bottom"/>
+    </Grid>
+  </Grid>
+</UserControl>

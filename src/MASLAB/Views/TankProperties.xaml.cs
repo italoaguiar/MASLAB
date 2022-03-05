@@ -49,6 +49,8 @@ namespace MASLAB.Views
 
             _editor = this.FindControl<TextEditor>("Editor");
             _editor.Background = Brushes.Transparent;
+            _editor.Options.ConvertTabsToSpaces = true;
+            _editor.Options.IndentationSize = 4;
             _editor.ShowLineNumbers = true;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
             _editor.TextArea.TextEntered += textEditor_TextArea_TextEntered;
@@ -173,7 +175,7 @@ namespace MASLAB.Views
 
 #pragma warning disable IDE0044 // Adicionar modificador somente leitura
         private OverloadInsightWindow _insightWindow;
-        private ToolTip toolTip;
+        private ToolTip toolTip = null;
 #pragma warning restore IDE0044 // Adicionar modificador somente leitura
 
 
@@ -239,40 +241,30 @@ namespace MASLAB.Views
         {
             switch (e.Text)
             {
-                case "\n":
-                    e.Handled = true;
+                case "\n":                    
 
                     var ln = _editor.Document.GetLineByOffset(_editor.CaretOffset);
+                    var bline = _editor.Document.GetText(ln.Offset, ln.EndOffset - ln.Offset);
 
-                    string tb = "\n";
-                    for (int i = ln.Offset; i < ln.EndOffset; i++)
+                    if (bline.EndsWith("{}"))
                     {
-                        if (char.IsLetterOrDigit(_editor.Document.Text[i])) break;
-                        tb += _editor.Document.Text[i];
-                    }
-                    var offset = _editor.CaretOffset;
-                    int oc = tb.Length;
+                        e.Handled = true;
 
-                    if (offset > 1 && offset < ln.EndOffset)
-                    {
-                        string lineEnd = $"{_editor.Document.Text[offset - 1]}{_editor.Document.Text[offset]}";
-
-                        if (lineEnd == "{}" || lineEnd == "()" || lineEnd == "[]")
+                        string tb = string.Empty;
+                        for (int i = ln.Offset; i < ln.EndOffset; i++)
                         {
-                            tb = $"{tb}\t{tb}";
-                            oc++;
+                            if (_editor.Document.Text[i] == 9)
+                                tb += _editor.Document.Text[i];
                         }
+                        var offset = _editor.CaretOffset;
+                        int oc = tb.Length;
+                        
+                        _editor.Document.Insert(offset, $"{Environment.NewLine}{tb}\t{Environment.NewLine}{tb}");
+
+                        _editor.CaretOffset = offset + (tb.Length > 1 ? oc : 1) + 3;
                     }
-
-                    _editor.Document.Insert(offset, tb);
-
-                    _editor.CaretOffset = offset + (tb.Length > 1 ? oc : 1);
                     break;
-                //case "(":
-                //    //    e.Handled = true;
-                //    //    _editor.Document.Insert(_editor.CaretOffset, "()");
-                //    //    _editor.CaretOffset--;
-                //    break;
+
                 case ")":
                     _insightWindow?.Close();
                     break;

@@ -1,0 +1,49 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:behaviors="clr-namespace:MASLAB.Behaviors;assembly=MASLAB"
+             x:Class="MASLAB.Views.Spring">
+  <Grid x:Name="canvas">
+    
+    <Grid ColumnDefinitions="2*,1*,1*,1*,1*,1*,2*" RowDefinitions="*, Auto" Height="50" MinWidth="60" Background="Transparent" PointerPressed="OnPointerPressed" PointerReleased="OnPointerReleased" PointerMoved="OnPointerMoved" Canvas.Left="{Binding $parent[UserControl].ViewModel.X}" Canvas.Top="{Binding $parent[UserControl].ViewModel.Y}">
+      
+      <i:Interaction.Behaviors>
+        <behaviors:DragControlBehavior TargetControl="{Binding #canvas}" />
+      </i:Interaction.Behaviors>
+      <Grid RowDefinitions="1*,1*">
+        <Path Grid.Row="1" Data="F1 M 1,1L 0,0" Margin="5,1,-2,1"  StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+        <Thumb Grid.RowSpan="2" HorizontalAlignment="Left">
+        </Thumb>
+      </Grid>    
+
+      <Path Grid.Column="1" Data="F1 M 0,0L 1,1" Margin="2,1,-2,1"  StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+      <Border Grid.Column="1" Background="#525252" CornerRadius="12" Width="5" HorizontalAlignment="Left"/>
+
+      <Path Grid.Column="2" Data="F1 M 0,0L 1,1" Margin="2,1,-2,1" StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+      <Border Grid.Column="2" Background="#525252" CornerRadius="12" Width="5" HorizontalAlignment="Left"/>
+
+      <Path Grid.Column="3" Data="F1 M 0,0L 1,1" Margin="2,1,-2,1" StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+      <Border Grid.Column="3" Background="#525252" CornerRadius="12" Width="5" HorizontalAlignment="Left"/>
+
+      <Path Grid.Column="4" Data="F1 M 0,0L 1,1" Margin="2,1,-2,1" StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+      <Border Grid.Column="4" Background="#525252" CornerRadius="12" Width="5" HorizontalAlignment="Left"/>
+
+      <Path Grid.Column="5" Data="F1 M 0,0L 1,1" Margin="2,1,-2,1" StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+      <Border Grid.Column="5" Background="#525252" CornerRadius="12" Width="5" HorizontalAlignment="Left"/>
+
+      <Grid Grid.Column="6" RowDefinitions="1*,1*">
+        <Path Data="F1 M 0,0L 1,1" Margin="1,1,5,1"  StrokeJoin="Round" Stroke="#757575" StrokeThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Fill"/>
+        <Ellipse Width="8" Height="8" Grid.RowSpan="2" Fill="#757575" HorizontalAlignment="Right"/>
+      </Grid>
+
+      <Border Grid.Column="6" Background="#525252" CornerRadius="12" Width="5" HorizontalAlignment="Left"/>
+
+      <StackPanel Grid.Row="1" Grid.ColumnSpan="7">
+        <TextBlock Text="F= k•x" TextAlignment="Center" FontSize="10"/>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>

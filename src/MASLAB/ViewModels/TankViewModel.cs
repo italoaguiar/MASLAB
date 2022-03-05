@@ -70,7 +70,8 @@ namespace MASLAB.ViewModels
                 {
                     ConnectionType = ConnectionType.Input,
                     Position = CurrentPoint,
-                    Tank = Tank
+                    Tank = Tank,
+                    ConnectionPosition = GetPosition(p.ToString())
                 });
             }
             catch(Exception e)
@@ -93,12 +94,28 @@ namespace MASLAB.ViewModels
                 {
                     ConnectionType = ConnectionType.Output,
                     Position = CurrentPoint,
-                    Tank = Tank
+                    Tank = Tank,
+                    ConnectionPosition = GetPosition(p.ToString())
                 });
             }
             catch(Exception e)
             {
                 await MessageBox.Show(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtém a posição da conexão baseada na string do parâmetro
+        /// </summary>
+        /// <param name="pos">String da posição</param>
+        private ConnectionPosition GetPosition(string pos)
+        {
+            switch (pos)
+            {
+                case "TL": return ConnectionPosition.TopLeft;
+                case "TR": return ConnectionPosition.TopRight;
+                case "BL": return ConnectionPosition.BottomLeft;
+                default: return ConnectionPosition.BottomRight;
             }
         }
     }

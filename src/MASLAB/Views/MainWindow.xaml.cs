@@ -36,6 +36,14 @@ namespace MASLAB.Views
                 if (a.Key == Avalonia.Input.Key.Escape)
                     ConnectionHelper.Cancel();
             };
+
+            this.PointerPressed += (s, a) =>
+            {
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+                if (a.MouseButton == Avalonia.Input.MouseButton.Right)
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+                    ConnectionHelper.Cancel();
+            };
         }
 
         private void InitializeComponent()

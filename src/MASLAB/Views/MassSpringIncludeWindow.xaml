@@ -1,0 +1,55 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="200" HasSystemDecorations="False"
+        x:Class="MASLAB.Views.MassSpringIncludeWindow" SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"        
+        Title="MassSpringIncludeWindow">
+  <Window.Background>
+    <LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+      <GradientStop Offset="0" Color="#FFFFFFFF"/>
+      <GradientStop Offset="0" Color="#FFF0F0F0"/>
+      <GradientStop Offset="1" Color="#FF959ea3" />
+    </LinearGradientBrush>
+  </Window.Background>
+  <Border BorderThickness="1" BorderBrush="#2B579A">
+    <Grid RowDefinitions="Auto, *">
+      <Grid Background="#2B579A">
+        <TextBlock Text="Inserir novo elemento" Margin="5" Foreground="White"/>
+      </Grid>
+      <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Margin="10">
+        <Border Margin="5" CornerRadius="10" Width="100" Height="140" BorderThickness="3" BorderBrush="#c1c8d4">
+          <Grid RowDefinitions="*, Auto">
+            
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="Massa"/>
+          </Grid>
+        </Border>
+
+        <Border Margin="5" CornerRadius="10" Width="100" Height="140" BorderThickness="3" BorderBrush="#c1c8d4">
+          <Grid RowDefinitions="*, Auto">
+
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="Mola"/>
+          </Grid>
+        </Border>
+
+
+        <Border Margin="5" CornerRadius="10" Width="100" Height="140" BorderThickness="3" BorderBrush="#c1c8d4">
+          <Grid RowDefinitions="*, Auto">
+
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="Amortecedor"/>
+          </Grid>
+        </Border>
+
+
+        <Border Margin="5" CornerRadius="10" Width="100" Height="140" BorderThickness="3" BorderBrush="#c1c8d4">
+          <Grid RowDefinitions="*, Auto">
+
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="Subsistema"/>
+          </Grid>
+        </Border>
+
+      </StackPanel>
+    </Grid>
+  </Border>
+</Window>

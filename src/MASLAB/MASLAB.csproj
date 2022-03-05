@@ -3,11 +3,18 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>C:\Users\italo\source\repos\MASLAB\MASLAB\MASLAB.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>C:\Users\italo\source\repos\MASLAB\MASLAB\MASLAB.xml</DocumentationFile>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\italo\source\repos\MASLAB\MASLAB\MASLAB.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DocumentationFile>C:\Users\italo\source\repos\MASLAB\MASLAB\MASLAB.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
@@ -16,14 +23,18 @@
     </Compile>
     <AvaloniaResource Include="**\*.xaml">
       <SubType>Designer</SubType>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\**" />
+    </AvaloniaResource>    
     <AvaloniaResource Include="*.txt" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\*" />
+  </ItemGroup>
+  <ItemGroup>
     <AvaloniaResource Remove="Views\ConnectorControl.xaml" />
+    <AvaloniaResource Remove="Views\MassSpring.xaml" />
     <AvaloniaResource Remove="Views\MessageBox.xaml" />
     <AvaloniaResource Remove="Views\SimulationSettings.xaml" />
+    <AvaloniaResource Remove="Views\Spring.xaml" />
     <AvaloniaResource Remove="Views\Tank.xaml" />
     <AvaloniaResource Remove="Views\TankProperties.xaml" />
   </ItemGroup>
@@ -33,12 +44,15 @@
     <None Remove="Views\SimulationSettings.xaml" />    
     <None Remove="Views\Tank.xaml" />    
     <None Remove="Views\TankProperties.xaml" />
+    <None Remove="Views\MassSpring.xaml" />
+    <None Remove="Views\Spring.xaml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.3" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.9.0-preview1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.3" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.3" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.9.3" />
     <PackageReference Include="MathNet.Numerics" Version="4.9.0" />
     <PackageReference Include="MathNet.Numerics.Data.Matlab" Version="4.0.0" />
     <PackageReference Include="MathNet.Numerics.Data.Text" Version="4.0.0" />
@@ -49,6 +63,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.5.0-beta2-final" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.IO.Ports" Version="4.7.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Tank.xaml">
@@ -76,6 +92,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\MassSpring.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Spring.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -91,10 +117,31 @@
     <None Update="XML\MathNet.Numerics.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="XML\System.IO.Ports.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="XML\System.Linq.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="XML\System.Net.Http.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="XML\System.Net.Sockets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="XML\System.Runtime.Extensions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="XML\System.Runtime.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="XML\System.Text.Json.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="XML\System.Text.RegularExpressions.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="XML\System.Threading.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

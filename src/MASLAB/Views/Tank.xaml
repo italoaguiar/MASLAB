@@ -5,85 +5,122 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:MASLAB.ViewModels;assembly=MASLAB"
              x:Class="MASLAB.Views.Tank">
-  <Design.DataContext>
-    <vm:TankViewModel/>
-  </Design.DataContext>
-  <Canvas>
-    <Border Canvas.Left="15" Width="105" Height="105" BorderBrush="Black" BorderThickness="1,0,1,1" Background="Transparent">
-      <Rectangle Height="{Binding TankData.TankLevel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Fill="CornflowerBlue" VerticalAlignment="Bottom"/>
-    </Border>
+    <Design.DataContext>
+        <vm:TankViewModel/>
+    </Design.DataContext>
+    <Canvas>
+        <Border Canvas.Left="45" Width="105" Height="105" BorderBrush="Black" BorderThickness="1,0,1,1" Background="Transparent">
+            <Rectangle Height="{Binding TankData.TankLevel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Fill="CornflowerBlue" VerticalAlignment="Bottom"/>
+        </Border>
+        <TextBlock Canvas.Left="45" Canvas.Top="105" Width="105" TextAlignment="Center" FontSize="9"  Text="{Binding TankData.TankLevel, StringFormat='{}{0:0.#####}' RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
 
-    <Button Background="#08454545" ZIndex="1000" Canvas.Top="13" Canvas.Left="9" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
-      <Button.Styles>
-        <Style Selector="Button">
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="Button">
-                <Border x:Name="border1" Width="12" Height="14" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
-                </Border>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
-        <Style Selector="Button:pointerover /template/ Border#border1">
-          <Setter Property="Background" Value="#FF454545"/>
-          <Setter Property="BorderBrush" Value="#FF454545"/>
-        </Style>
-        <Style Selector="Button:pressed  /template/ Border#border">
-          <Setter Property="Background" Value="Black"/>
-        </Style>
-      </Button.Styles>
-    </Button>
+        <Button Background="#28454545" ZIndex="1000" Canvas.Top="13" Canvas.Left="39" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" CommandParameter="TL">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border1" Width="12" Height="14" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ Border#border1">
+                    <Setter Property="Background" Value="#FF454545"/>
+                    <Setter Property="BorderBrush" Value="#FF454545"/>
+                </Style>
+                <Style Selector="Button:pressed  /template/ Border#border">
+                    <Setter Property="Background" Value="Black"/>
+                </Style>
+            </Button.Styles>
+        </Button>
 
-    <Button Background="#08454545" Canvas.Top="13" ZIndex="1000" Canvas.Left="115" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
-      <Button.Styles>
-        <Style Selector="Button">
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="Button">
-                <Border x:Name="border" Width="12" Height="14" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
-                </Border>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
-        <Style Selector="Button:pointerover /template/ Border#border">
-          <Setter Property="Background" Value="#FF454545"/>
-          <Setter Property="BorderBrush" Value="#FF454545"/>
-        </Style>
-        <Style Selector="Button:pressed  /template/ Border#border">
-          <Setter Property="Background" Value="Black"/>
-        </Style>
-      </Button.Styles>
-    </Button>
+        <Button Background="#28454545" Canvas.Top="13" ZIndex="1000" Canvas.Left="145" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.InputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"  CommandParameter="TR">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Width="12" Height="14" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ Border#border">
+                    <Setter Property="Background" Value="#FF454545"/>
+                    <Setter Property="BorderBrush" Value="#FF454545"/>
+                </Style>
+                <Style Selector="Button:pressed  /template/ Border#border">
+                    <Setter Property="Background" Value="Black"/>
+                </Style>
+            </Button.Styles>
+        </Button>
 
-    <Rectangle Fill="Black" Width="3" Height="8" Canvas.Left="133" Canvas.Top="80"/>
-    <Path Width="30" Height="15" Canvas.Left="120" Canvas.Top="85" Stretch="Fill" Fill="#FF6E521F" Data="F1 M 8.90098e-008,1.47L 4.02,1.47L 4.02,2.86102e-006L 8.14,2.86102e-006L 8.14,1.47L 12.16,1.47L 12.16,6.27L 8.90098e-008,6.27L 8.90098e-008,1.47 Z "/>
+        <Rectangle Fill="Black" Width="3" Height="8" Canvas.Left="163" Canvas.Top="80"/>
+        <Path Width="30" Height="15" Canvas.Left="150" Canvas.Top="85" Stretch="Fill" Fill="#FF6E521F" Data="F1 M 8.90098e-008,1.47L 4.02,1.47L 4.02,2.86102e-006L 8.14,2.86102e-006L 8.14,1.47L 12.16,1.47L 12.16,6.27L 8.90098e-008,6.27L 8.90098e-008,1.47 Z "/>
 
-    <Rectangle Fill="#BD5D01" Width="15" Height="5" Canvas.Left="127" Canvas.Top="75"/>
+        <Rectangle Fill="#BD5D01" Width="15" Height="5" Canvas.Left="157" Canvas.Top="75"/>
 
-    <Button Background="#08454545" Canvas.Top="90" ZIndex="1000" Canvas.Left="147" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.OutputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" >
-      <Button.Styles>
-        <Style Selector="Button">
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="Button">
-                <Border x:Name="border" Width="10" Height="10" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
-                </Border>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
-        <Style Selector="Button:pointerover /template/ Border#border">
-          <Setter Property="Background" Value="#FF454545"/>
-          <Setter Property="BorderBrush" Value="#FF454545"/>
-        </Style>
-        <Style Selector="Button:pressed  /template/ Border#border">
-          <Setter Property="Background" Value="Black"/>
-        </Style>
-      </Button.Styles>
-    </Button>
-  </Canvas>
+        <Button Background="#28454545" Canvas.Top="88" ZIndex="1000" Canvas.Left="177" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.OutputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"  CommandParameter="BR">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Width="10" Height="12" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ Border#border">
+                    <Setter Property="Background" Value="#FF454545"/>
+                    <Setter Property="BorderBrush" Value="#FF454545"/>
+                </Style>
+                <Style Selector="Button:pressed  /template/ Border#border">
+                    <Setter Property="Background" Value="Black"/>
+                </Style>
+            </Button.Styles>
+        </Button>
 
-  
+
+
+        <Rectangle Fill="Black" Width="3" Height="8" Canvas.Left="28" Canvas.Top="80"/>
+        <Path Width="30" Height="15" Canvas.Left="15" Canvas.Top="85" Stretch="Fill" Fill="#FF6E521F" Data="F1 M 8.90098e-008,1.47L 4.02,1.47L 4.02,2.86102e-006L 8.14,2.86102e-006L 8.14,1.47L 12.16,1.47L 12.16,6.27L 8.90098e-008,6.27L 8.90098e-008,1.47 Z "/>
+
+        <Rectangle Fill="#BD5D01" Width="15" Height="5" Canvas.Left="22" Canvas.Top="75"/>
+
+        <Button Background="#28454545" Canvas.Top="88" ZIndex="1000" Canvas.Left="10" BorderBrush="#03000000" ToolTip.Tip="Adicionar tubulação" Command="{Binding ViewModel.OutputConnectionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"  CommandParameter="BL">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Width="10" Height="12" Background="{TemplateBinding Background}"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ Border#border">
+                    <Setter Property="Background" Value="#FF454545"/>
+                    <Setter Property="BorderBrush" Value="#FF454545"/>
+                </Style>
+                <Style Selector="Button:pressed  /template/ Border#border">
+                    <Setter Property="Background" Value="Black"/>
+                </Style>
+            </Button.Styles>
+        </Button>
+
+
+
+
+        <TextBlock Canvas.Left="10" TextAlignment="Center" Canvas.Top="98" FontSize="9" Width="40" Text="{Binding TankData.LeftOutput, StringFormat='{}{0:0.####}' RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
+        <TextBlock Canvas.Left="142" TextAlignment="Center" Canvas.Top="98" FontSize="9" Width="40" Text="{Binding TankData.RightOutput, StringFormat='{}{0:0.####}' RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
+    </Canvas>
+
+
+
 </UserControl>

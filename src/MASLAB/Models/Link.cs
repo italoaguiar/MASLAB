@@ -56,6 +56,11 @@ namespace MASL.Controls.DataModel
             }
         }
 
+        /// <summary>
+        /// Tipo da conexão
+        /// </summary>
+        public LinkType Type { get; set; }
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

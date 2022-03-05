@@ -12,32 +12,39 @@ public class Tank : SimulationTank
 	///</summary>
 	public override void OnSimulationStarting()
 	{
-		Level = 50;                   // altura inicial do tanque
-		ValveConstant = 0.5;   // constante da válvula de saída
-		TankArea = 1;              // área da base do tanque
+		Level = 50;            // altura inicial do tanque
+		ValveConstant1 = 0.5;  // constante da válvula de saída 1
+		ValveConstant2 = 0.5;  // constante da válvula de saída 2
+		TankArea = 1;          // área da base do tanque
 	}
 	
 	/// <summary>
 	/// Método de atualização do estado do tanque para cada intervalo de tempo
 	/// </summary>
-	/// <param name="tempo">Instante atual de tempo</param>
-	/// <param name="simulationStep">Intervalo de tempo</param>
+	/// <param name="tempo">Instante atual de tempo dado em segundos</param>
+	/// <param name="passo">Tamanho do intervalo de tempo entre cada chamada do método OnUpdate dado em segundos</param>
 	/// <param name="entrada1">Entrada 1 do tanque</param>
 	/// <param name="entrada2">Entrada 2 do tanque</param>
+	/// <param name="saida1">Saída 1 do tanque</param>
+	/// <param name="saida2">Saída 2 do tanque</param>
 	/// <returns>Saída do tanque</returns>
-	public override SimulationData OnUpdate(TimeSpan tempo, TimeSpan simulationStep, double entrada1, double entrada2)
+	public override SimulationData OnUpdate(double tempo, double passo, double entrada1, double entrada2, double saida1, double saida2)
 	{
-		double output = 0;
-		double level = RungeKutta4(Level, tempo.TotalSeconds, tempo.TotalSeconds + simulationStep.TotalSeconds, 
-			(t, x) =>
+		double saidaEsquerda = 0;
+		double saidaDireita = 0;
+		double level = RungeKutta4(Level, tempo, tempo + passo,  (t, x) => // dx/dt
 			{
-				double qs = ValveConstant * Math.Sqrt(x);                    // vazão de saída
-				double xd = (entrada1 + entrada2 - qs) / TankArea;     // (vazão de entrada - vazão de saída) / área da base
+				double qs1 = ValveConstant1 * Math.Sqrt(x);  // vazão de saída 1
+				double qs2 = ValveConstant2 * Math.Sqrt(x);  // vazão de saída 2
+				double xd = (entrada1 + entrada2 + saida1 + saida2 - qs1 - qs2 ) / TankArea; // (vazão de entrada - vazão de saída) / área da base
+				                                                                             // Note que as saídas também podem ser entradas. O sinal indica a direção do fluxo.
 				
 				if (x < 0)
 					return 0;
+
+				saidaEsquerda = qs1;
+				saidaDireita = qs2;
 				
-				output = qs;
 				return xd;
 			}
 		);
@@ -46,7 +53,7 @@ public class Tank : SimulationTank
 		//Log(tempo, output); //imprime a vazão na aba de log da simulação
 		//Log("Exemplo de texto impresso na aba log");
 		
-		return new SimulationData(level,output);
+		return new SimulationData(level, saidaEsquerda, saidaDireita);
 	}
 	
 	

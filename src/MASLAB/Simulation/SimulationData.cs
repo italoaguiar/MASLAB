@@ -22,11 +22,13 @@ namespace Simulation
         /// Cria uma nova instância de SimulationData
         /// </summary>
         /// <param name="level">Nível calculado</param>
-        /// <param name="output">Vazão calculada</param>
-        public SimulationData(double level, double output)
+        /// <param name="leftOutput">Vazão calculada na saída esquerda</param>
+        /// <param name="rightOutput">Vazão calculada na saída direita</param>
+        public SimulationData(double level, double leftOutput, double rightOutput)
         {
             Level = level;
-            Output = output;
+            LeftOutput = leftOutput;
+            RightOutput = rightOutput;
         }
 
         /// <summary>
@@ -37,6 +39,11 @@ namespace Simulation
         /// <summary>
         /// Representa a vazão do tanque calculada da simulação
         /// </summary>
-        public double Output { get; set; }
+        public double LeftOutput { get; set; }
+
+        /// <summary>
+        /// Representa a vazão do tanque calculada da simulação
+        /// </summary>
+        public double RightOutput { get; set; }
     }
 }

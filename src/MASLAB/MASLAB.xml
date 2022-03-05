@@ -517,6 +517,16 @@
             Determina o tipo de simulação
             </summary>
         </member>
+        <member name="T:MASLAB.ViewModels.SpringViewModel">
+            <summary>
+            ViewModel responsável por controlar o comportamento de uma mola
+            </summary>
+        </member>
+        <member name="M:MASLAB.ViewModels.SpringViewModel.#ctor(Avalonia.Controls.UserControl)">
+            <summary>
+            Cria uma nova instância de SpringViewModel
+            </summary>
+        </member>
         <member name="T:MASLAB.ViewModels.TankViewModel">
             <summary>
             Representa a ViewModel do Tanque
@@ -707,6 +717,31 @@
         <member name="P:MASLAB.Views.SimulationSettings.ViewModel">
             <summary>
             ViewModel de SimulationSettings
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.Spring.OnPointerMoved(System.Object,Avalonia.Input.PointerEventArgs)">
+            <summary>
+            Captura os eventos do Ponteiro ao se mover sobre a mola
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.Spring.OnPointerPressed(System.Object,Avalonia.Input.PointerPressedEventArgs)">
+            <summary>
+            Captura os eventos do Ponteiro ao pressionar
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.Spring.OnPointerReleased(System.Object,Avalonia.Input.PointerReleasedEventArgs)">
+            <summary>
+            Captura os eventos do Pointeiro ao liberar o cursor 
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.Spring.OnPointerLeave(System.Object,Avalonia.Input.PointerEventArgs)">
+            <summary>
+            Captura os eventos do Ponteiro ao entrar na região da mola
+            </summary>
+        </member>
+        <member name="M:MASLAB.Views.Spring.OnPointerEnter(System.Object,Avalonia.Input.PointerEventArgs)">
+            <summary>
+            Captura os eventos do Ponteiro ao deixar a região da Mola
             </summary>
         </member>
         <member name="T:MASLAB.Views.Tank">

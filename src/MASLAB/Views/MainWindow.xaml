@@ -240,7 +240,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                   <DataTemplate>
-                                    <Grid>
+                                    <Grid Margin="0,20,0,0">
                                       <Grid.ContextMenu>
                                         <ContextMenu>
                                           <MenuItem Header="Remover Tanque" Command="{Binding RemoveCommand}" CommandParameter="{Binding}">
@@ -255,7 +255,7 @@
                                           </MenuItem>
                                         </ContextMenu>
                                       </Grid.ContextMenu>
-                                      <m:Tank Width="165" Height="105" Margin="25,0,35.5,7" ParentContainer="{Binding #go}" TankData="{Binding}"/>
+                                      <m:Tank Width="195" Height="125" Margin="25,0,35.5,7" ParentContainer="{Binding #go}" TankData="{Binding}"/>
                                     </Grid>
                                   </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -344,6 +344,11 @@
             </StackPanel>
           </ScrollViewer>
         </TabItem>
+        <TabItem Header="Sistema Massa-Mola" IsVisible="false">
+          <Grid>
+            <m:MassSpring></m:MassSpring>
+          </Grid>
+        </TabItem>
         <TabItem Header="Gráficos">
           <Grid RowDefinitions="*,Auto" Background="White">            
             <plot:PlotView x:Name="plot" Model="{Binding ., Source={x:Static dt:ChartService.Model}}" />
@@ -407,7 +412,7 @@
         <TextBlock Text="Pausado! Pare a simulação para editar o projeto." IsVisible="{Binding Simulator.IsPaused}" Foreground="#F0F0F0" VerticalAlignment="Center" Margin="3,0"/>
       </StackPanel>
     </Border>
-    <Grid Name="pp" Width="600" Height="380" Grid.RowSpan="6">
+    <Grid Name="pp" Width="740" Height="648" Grid.RowSpan="6">
       <Popup Name="popup" IsOpen="{Binding IsAboutOpen, Mode=TwoWay}" Width="600" Height="381" StaysOpen="False" PlacementTarget="{Binding #pp}" PlacementMode="AnchorAndGravity">
         <Image Source="/Assets/splashscreen.png"/>
       </Popup>

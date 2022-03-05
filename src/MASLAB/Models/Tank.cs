@@ -32,6 +32,7 @@ namespace MASL.Controls.DataModel
         }
 
         private static string DefaultCode = null;
+        private long tickCount = 0;
 
         /// <summary>
         /// Cria uma nova instância de Tank
@@ -61,7 +62,8 @@ namespace MASL.Controls.DataModel
 
         private Level parent;
         private double tankLevel;
-        private double output;
+        private double leftOutput;
+        private double rightOutput;
 
         /// <summary>
         /// Representa o Nível que o tanque ocupa
@@ -92,13 +94,26 @@ namespace MASL.Controls.DataModel
         /// <summary>
         /// Saída calculada na simulação
         /// </summary>
-        public double Output
+        public double LeftOutput
         {
-            get => output;
+            get => leftOutput;
             set
             {
-                output = value;
-                OnPropertyChanged(nameof(Output));
+                leftOutput = value;
+                OnPropertyChanged(nameof(LeftOutput));
+            }
+        }
+
+        /// <summary>
+        /// Saída calculada na simulação
+        /// </summary>
+        public double RightOutput
+        {
+            get => rightOutput;
+            set
+            {
+                rightOutput = value;
+                OnPropertyChanged(nameof(RightOutput));
             }
         }
 
@@ -139,11 +154,23 @@ namespace MASL.Controls.DataModel
         /// <param name="interval">Intervalo entre chamadas de função</param>
         /// <param name="input1">Entrada 1 do tanque</param>
         /// <param name="input2">Entrada 2 do tanque</param>
-        public void UpdateTank(TimeSpan currentTime, TimeSpan interval, double input1, double input2)
+        /// <param name="output1">Saída 1 do tanque</param>
+        /// <param name="output2">Saída 2 do tanque</param>
+        public void UpdateTank(TimeSpan currentTime, TimeSpan interval, double input1, double input2, double output1, double output2)
         {
-            var s = SimulationTank.OnUpdate(currentTime, interval, input1, input2);
-            SimulationTank.Level = TankLevel = s.Level;
-            Output = s.Output;
+            if (SimulationTank != null)
+            {
+                var s = SimulationTank.OnUpdate(currentTime.TotalSeconds, interval.TotalSeconds, input1, input2, output1, output2);
+
+                //não atualizar o nível durante a inicialização
+                if(tickCount > Simulator.INITIALIZATION_TICKS)
+                    SimulationTank.Level = TankLevel = s.Level > 0 ? s.Level : 0;
+
+                LeftOutput = s.LeftOutput;
+                RightOutput = s.RightOutput;
+
+                tickCount++;
+            }
         }
 
 

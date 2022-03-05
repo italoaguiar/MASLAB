@@ -16,6 +16,7 @@ namespace MASL.Controls.DataModel
     {
         private Point _position;
         private ConnectionType _connectionType;
+        private ConnectionPosition _connectionPosition;
         private Tank tank;
 
         /// <summary>
@@ -54,6 +55,19 @@ namespace MASL.Controls.DataModel
             {
                 tank = value;
                 OnPropertyChanged(nameof(Tank));
+            }
+        }
+
+        /// <summary>
+        /// Posição da conexão
+        /// </summary>
+        public ConnectionPosition ConnectionPosition
+        {
+            get => _connectionPosition;
+            set
+            {
+                _connectionPosition = value;
+                OnPropertyChanged(nameof(ConnectionPosition));
             }
         }
 

@@ -24,6 +24,12 @@ namespace Simulation
         CancellationTokenSource _tokenSource;
 
         /// <summary>
+        /// Número de chamadas do instante zero da simulação
+        /// para garantir o estado inicial correto da simulação
+        /// </summary>
+        public const int INITIALIZATION_TICKS = 10;
+
+        /// <summary>
         /// Determina se a simulação está em andamento
         /// </summary>
         public bool IsRunning 
@@ -159,7 +165,12 @@ namespace Simulation
         }
 
         private void Simule(CancellationToken token)
-        {            
+        {  
+            //executa o instante zero da simulação x vezes para garantir que todos os tanques tenham os valores relacionais iniciais corretos.
+            if(IsStoped)
+                for(int i = 0; i< INITIALIZATION_TICKS; i++)
+                    Tick?.Invoke(this, new SimulationTickEventArgs() { CurrentTime = TimeSpan.Zero });
+
             switch (SimulationType)
             {
                 //lógica da simulação de tempo real

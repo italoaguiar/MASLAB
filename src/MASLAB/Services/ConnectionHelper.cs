@@ -30,15 +30,18 @@ namespace MASLAB.Services
                 {
                     throw new ArgumentException("Não é possível conectar duas entradas diretamente");
                 }
-                if (c1.ConnectionType == ConnectionType.Output && c.ConnectionType == ConnectionType.Output)
-                {
-                    throw new ArgumentException("Não é possível conectar duas saídas diretamente");
-                }
+                //if ()
+                //{
+                //    throw new ArgumentException("Não é possível conectar duas saídas diretamente");
+                //}
 
                 c2 = c;
+                var linkType = c1.ConnectionType == ConnectionType.Output && c.ConnectionType == ConnectionType.Output ? LinkType.Bidiretional : LinkType.Unidiretional;
+
                 Link l = new Link();
-                l.Origin = c1.ConnectionType == ConnectionType.Input? c2 : c1;
-                l.Target = c2.ConnectionType == ConnectionType.Output ? c1 : c2;
+                l.Origin = linkType == LinkType.Unidiretional ? (c1.ConnectionType == ConnectionType.Input ? c2 : c1) : c1;
+                l.Target = linkType == LinkType.Unidiretional ? (c2.ConnectionType == ConnectionType.Output ? c1 : c2) : c2;
+                l.Type = linkType;
                 OnConnectionRequested(l);
                 Clear();
             }

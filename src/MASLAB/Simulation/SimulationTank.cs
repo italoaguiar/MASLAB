@@ -23,9 +23,14 @@ namespace Simulation
 
 
         /// <summary>
-        /// Constante da válvula
+        /// Constante da válvula 1
         /// </summary>
-        public double ValveConstant { get; set; } = 0.5;
+        public double ValveConstant1 { get; set; } = 0.5;
+
+        /// <summary>
+        /// Constante da válvula 2
+        /// </summary>
+        public double ValveConstant2 { get; set; } = 0.5;
 
 
 
@@ -41,9 +46,11 @@ namespace Simulation
         /// <param name="time">Parâmetro de tempo</param>
         /// <param name="input1">Entrada 1 do tanque</param>
         /// <param name="input2">Entrada 2 do tanque</param>
+        /// <param name="output1">Saída 1 do tanque</param>
+        /// <param name="output2">Saída 2 do tanque</param>
         /// <param name="simulationStep">Intervalo de tempo entre chamadas de método</param>
         /// <returns>Saída calculada para o tanque</returns>
-        public abstract SimulationData OnUpdate(TimeSpan time, TimeSpan simulationStep, double input1, double input2);
+        public abstract SimulationData OnUpdate(double time, double simulationStep, double input1, double input2, double output1, double output2);
 
         /// <summary>
         /// Método Runge Kutta de Quarta ordem para equações diferenciais
@@ -83,6 +90,17 @@ namespace Simulation
         }
 
         /// <summary>
+        /// Plota um ponto no gráfico para a série definida
+        /// </summary>
+        /// <param name="serie">Nome da série</param>
+        /// <param name="time">Instante de tempo da série</param>
+        /// <param name="value">Valor a ser plotado</param>
+        public void Plot(string serie, double time, double value)
+        {
+            ChartService.GetService().Plot(serie, TimeSpan.FromSeconds(time), value);
+        }
+
+        /// <summary>
         /// Insere uma nova linha no log da simulação
         /// </summary>
         /// <param name="value">valor a ser inserido</param>
@@ -100,6 +118,16 @@ namespace Simulation
         public void Log(TimeSpan time, object value)
         {
             Log(time.ToString(@"mm\:ss\.fff") + "   |   " + value.ToString());
+        }
+
+        /// <summary>
+        /// Insere uma nova linha no log da simulação
+        /// </summary>
+        /// <param name="time">Instante de tempo</param>
+        /// <param name="value">valor a ser inserido</param>
+        public void Log(double time, object value)
+        {
+            Log(TimeSpan.FromSeconds(time), value); 
         }
     }    
 }
