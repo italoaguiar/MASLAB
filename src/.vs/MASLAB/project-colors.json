@@ -5,7 +5,12 @@
       "ProjectGuid": "179a8605-68da-4ae8-b2bd-b8c4dd416da9",
       "DisplayName": "MASLAB",
       "ColorIndex": 0
+    },
+    "72ee6533-49f5-4170-96e7-ca63fce7ab9c": {
+      "ProjectGuid": "72ee6533-49f5-4170-96e7-ca63fce7ab9c",
+      "DisplayName": "OxyPlot.Avalonia",
+      "ColorIndex": 1
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 2
 }
