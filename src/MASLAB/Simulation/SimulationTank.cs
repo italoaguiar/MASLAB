@@ -32,6 +32,15 @@ namespace Simulation
         /// </summary>
         public double ValveConstant2 { get; set; } = 0.5;
 
+        /// <summary>
+        /// Simulador
+        /// </summary>
+        internal Simulator Simulator { get; set; }
+
+        /// <summary>
+        /// Comando para salvar o gráfico
+        /// </summary>
+        internal Action<string> SaveChartCommand { get; set; }
 
 
         /// <summary>
@@ -39,6 +48,11 @@ namespace Simulation
         /// Pode ser utilizado para inicialização de variáveis
         /// </summary>
         public virtual void OnSimulationStarting() { }
+
+        /// <summary>
+        /// Método chamado quando a simulação é finalizada.
+        /// </summary>
+        public virtual void OnSimulationFinished() { }
 
         /// <summary>
         /// Método chamado a cada atualização das entradas do tanque
@@ -128,6 +142,90 @@ namespace Simulation
         public void Log(double time, object value)
         {
             Log(TimeSpan.FromSeconds(time), value); 
+        }
+
+        /// <summary>
+        /// Reinicia a contagem de tempo da simulação
+        /// </summary>
+        public void RestartTimer()
+        {
+            if (Simulator != null)
+                Simulator.Reset();
+        }
+
+        /// <summary>
+        /// Inicia a simulação
+        /// </summary>
+        public void Start()
+        {
+            if (Simulator != null)
+                Simulator.Start();
+        }
+
+        /// <summary>
+        /// Para a simulação
+        /// </summary>
+        public void Stop()
+        {
+            if (Simulator != null)
+                Simulator.Stop();
+        }
+
+        /// <summary>
+        /// Salva a imagem do gráfico no formato png
+        /// </summary>
+        /// <param name="path">Caminho para o arquivo de salvamento</param>
+        public void SaveChart(string path)
+        {
+            SaveChartCommand?.Invoke(path);
+        }
+
+        private static Dictionary<string, object> ValueBag { get; set; }
+
+        /// <summary>
+        /// Salva um valor compartilhado na simulação
+        /// </summary>
+        /// <typeparam name="T">Tipo do valor a ser salvo</typeparam>
+        /// <param name="key">Identificador ou nome</param>
+        /// <param name="value">Valor a ser salvo</param>
+        /// <returns>Retorna o valor inserido</returns>
+        public T SetValue<T>(string key, T value)
+        {
+            if(ValueBag == null)
+                ValueBag = new Dictionary<string, object>();
+
+            if(ValueBag.ContainsKey(key))
+                ValueBag[key] = value;
+            else
+                ValueBag.Add(key, value);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Retorna um valor previamente salvo. Se o valor não for encontrado, retorna o valor padrão informado
+        /// </summary>
+        /// <typeparam name="T">Tipo do valor salvo</typeparam>
+        /// <param name="key">Identificador ou nome</param>
+        /// <param name="defaultValue">Valor padrão</param>
+        /// <returns>Retorna o valor salvo previamente</returns>
+        public T GetValueOrDefault<T>(string key, T defaultValue)
+        {
+            if (ValueBag == null)
+                ValueBag = new Dictionary<string, object>();
+
+            if(ValueBag.ContainsKey(key))
+                return (T)ValueBag[key];
+            else
+                return defaultValue;
+        }
+
+        /// <summary>
+        /// Limpa os dados da plotagem
+        /// </summary>
+        public void ClearChart()
+        {
+            ChartService.GetService().Clear();
         }
     }    
 }

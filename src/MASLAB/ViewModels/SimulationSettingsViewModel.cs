@@ -12,7 +12,7 @@ namespace MASLAB.ViewModels
     {
         TimeSpan duration = TimeSpan.FromSeconds(2);
         TimeSpan interval = TimeSpan.FromMilliseconds(50);
-        string durationString = "00:02:000";
+        string durationString = "00:00:02:000";
         string intervalString = "00:00:050";
         bool isRealTime = true;
 
@@ -45,7 +45,7 @@ namespace MASLAB.ViewModels
                 this.RaiseAndSetIfChanged(ref durationString, value);
                 try
                 {
-                    Duration = TimeSpan.ParseExact(value, @"m\:s\:fff", System.Globalization.CultureInfo.InvariantCulture);
+                    Duration = TimeSpan.ParseExact(value, @"h\:m\:s\:fff", System.Globalization.CultureInfo.InvariantCulture);
                 }
                 catch { }
             }

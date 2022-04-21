@@ -52,8 +52,10 @@ namespace MASLAB.ViewModels
             Simulator = new Simulator();
             Simulator.SimulationType = SimulationType.RealTime;
             Simulator.SimulationDuration = TimeSpan.FromMinutes(5);
-            Simulator.Tick += OnSimulationTick;
+            Simulator.Tick += (s, a) => jobs.Enqueue(a);
             Simulator.PropertyChanged += (s, a) => UpdateCommands();
+
+            StartSimulationLoop();
 
             //configura o comando de abertura de arquivo
             OpenCommand = new CommandAdapter(true)
@@ -87,7 +89,8 @@ namespace MASLAB.ViewModels
                                 {
                                     //compila o código de todos os tanques
                                     await t.Compile();
-
+                                    t.SimulationTank.Simulator = Simulator;
+                                    t.SimulationTank.SaveChartCommand = s => ExportPng(ChartControl, s);
                                     //chama o método de inicialização de cada tanque
                                     t.SimulationTank.OnSimulationStarting();
                                 }
@@ -146,7 +149,8 @@ namespace MASLAB.ViewModels
             //configura o comando de adição de níveis
             AddLevelCommand = new CommandAdapter(true)
             {
-                Action = (p) => {
+                Action = (p) =>
+                {
                     var level = new Level(Project);
                     level.Name = $"Nível {Project.Levels.Count + 1}";
                     level.Items = new ObservableCollection<Tank>() { new Tank(level) };
@@ -159,7 +163,7 @@ namespace MASLAB.ViewModels
             };
 
             //configura o comando para exportar imagens do diagrama
-            ExportCommand = new CommandAdapter(true){ Action = Export };
+            ExportCommand = new CommandAdapter(true) { Action = Export };
 
 
             SimulationSettingsCommand = new CommandAdapter(true)
@@ -183,7 +187,7 @@ namespace MASLAB.ViewModels
                 Action = (p) => ((OxyPlot.Avalonia.PlotView)p).ResetAllAxes()
             };
 
-            
+
             ChartZoomInCommand = new CommandAdapter(true)
             {
                 Action = (p) => ((OxyPlot.Avalonia.PlotView)p).ZoomAllAxes(1.1)
@@ -208,9 +212,25 @@ namespace MASLAB.ViewModels
         {
             //seleciona o primeiro arquivo encontrado com a extensão .masl
             var r = Environment.GetCommandLineArgs().FirstOrDefault(x => x.ToLower().EndsWith(".masl"));
-            if(r != null)
+            if (r != null)
             {
                 OpenFile(r);
+            }
+        }
+
+        private void NotifyEnd()
+        {
+            if (endNotified == false)
+            {
+                foreach (var l in Project.Levels)
+                    foreach (var t in l.Items)
+                    {
+                        try
+                        {
+                            t?.SimulationTank?.OnSimulationFinished();
+                        }
+                        catch { }
+                    }
             }
         }
 
@@ -220,11 +240,12 @@ namespace MASLAB.ViewModels
         }
 
         bool linkEnabled;
+        bool endNotified = false;
         IList<Point> pointCollection = new List<Point>();
         Project project;
         bool about;
         int selectedTabIndex = 0;
-
+        Queue<SimulationTickEventArgs> jobs = new Queue<SimulationTickEventArgs>();
 
 
         /// <summary>
@@ -337,9 +358,9 @@ namespace MASLAB.ViewModels
         /// <summary>
         /// Determina se a adição de novas conexões está habilitado
         /// </summary>
-        public bool LinkEnabled 
-        { 
-            get => linkEnabled; 
+        public bool LinkEnabled
+        {
+            get => linkEnabled;
             private set => this.RaiseAndSetIfChanged(ref linkEnabled, value);
         }
 
@@ -347,20 +368,25 @@ namespace MASLAB.ViewModels
         /// <summary>
         /// Obtém a lista de pontos da conexão atual
         /// </summary>
-        public IList<Point> PointCollection 
-        { 
-            get => pointCollection; 
-            set => pointCollection = this.RaiseAndSetIfChanged(ref pointCollection, value); 
+        public IList<Point> PointCollection
+        {
+            get => pointCollection;
+            set => pointCollection = this.RaiseAndSetIfChanged(ref pointCollection, value);
         }
 
         /// <summary>
         /// Obtém ou define o índice da aba selecionada
         /// </summary>
-        public int SelectedTabIndex 
-        { 
+        public int SelectedTabIndex
+        {
             get => selectedTabIndex;
             set => this.RaiseAndSetIfChanged(ref selectedTabIndex, value);
         }
+
+        /// <summary>
+        /// Controle do gráfico
+        /// </summary>
+        public Control ChartControl { get; set; }
 
         /// <summary>
         /// Método utilizado para abrir um projeto
@@ -372,7 +398,7 @@ namespace MASLAB.ViewModels
                 OpenFileDialog ofd = new OpenFileDialog();
                 ofd.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo de projeto
                 {
-                    Extensions = new List<string> { ".masl" },
+                    Extensions = new List<string> { "masl" },
                     Name = "Projeto do MASLAB"
                 });
 
@@ -468,89 +494,101 @@ namespace MASLAB.ViewModels
         }
 
 
-        
+
 
 
         /// <summary>
         /// Método chamado a cada TIC do simulador
         /// </summary>
-        /// <param name="sender">Instância do simulador</param>
-        /// <param name="e">Parâmetros do simulador</param>
-        private async void OnSimulationTick(object sender, SimulationTickEventArgs e)
+        private async void StartSimulationLoop()
         {
             try
             {
                 await Task.Run(async () =>
                 {
-                    //obtém os tanques de todos os níveis
-                    foreach (var t in Project.Levels.SelectMany(x => x.Items))
+                    while(true)
                     {
-
-
-                        //obtém as conexões de cada tanque
-                        var r = Project.Connections.Where(x => x.Target.Tank == t || x.Origin.Tank == t).ToArray();
-
-                        double tl = 0; 
-                        double tr = 0; 
-                        double bl = 0;
-                        double br = 0;
-
-                        var tl_ = r.FirstOrDefault(x => x.Target.Tank == t && x.Type == LinkType.Unidiretional && x.Target.ConnectionPosition == ConnectionPosition.TopLeft);
-
-                        if (tl_?.Origin.ConnectionPosition == ConnectionPosition.BottomRight)
-                            tl = tl_.Origin.Tank.RightOutput;
-                        else
-                            tl = tl_?.Origin?.Tank?.LeftOutput ?? 0;
-
-                        var tr_ = r.FirstOrDefault(x => x.Target.Tank == t && x.Type == LinkType.Unidiretional && x.Target.ConnectionPosition == ConnectionPosition.TopRight);
-
-                        if (tr_?.Origin.ConnectionPosition == ConnectionPosition.BottomRight)
-                            tr = tr_.Origin.Tank.RightOutput;
-                        else
-                            tr = tr_?.Origin?.Tank?.LeftOutput ?? 0;
-
-
-
-                        var bl_ = r.FirstOrDefault(x =>
-                            x.Type == LinkType.Bidiretional &&
-                            ((x.Origin.Tank == t && x.Origin.ConnectionPosition == ConnectionPosition.BottomLeft) || (x.Target.Tank == t && x.Target.ConnectionPosition == ConnectionPosition.BottomLeft)));
-
-                        if (bl_?.Origin?.Tank != t)
-                            if(bl_?.Origin?.ConnectionPosition == ConnectionPosition.BottomRight)
-                                bl = bl_?.Origin?.Tank?.RightOutput ?? 0;
-                            else
-                                bl = bl_?.Origin?.Tank?.LeftOutput ?? 0;
-                        else if (bl_?.Target?.Tank != t)
-                            if (bl_?.Target?.ConnectionPosition == ConnectionPosition.BottomRight)
-                                bl = bl_?.Target?.Tank?.RightOutput ?? 0;
-                            else
-                                bl = bl_?.Target?.Tank?.LeftOutput ?? 0;
-
-                        var br_ = r.FirstOrDefault(x =>
-                            x.Type == LinkType.Bidiretional &&
-                            ((x.Origin.Tank == t && x.Origin.ConnectionPosition == ConnectionPosition.BottomRight) || (x.Target.Tank == t && x.Target.ConnectionPosition == ConnectionPosition.BottomRight)));
-
-                        if (br_?.Origin?.Tank != t)
-                            if (br_?.Origin?.ConnectionPosition == ConnectionPosition.BottomRight)
-                                br = br_?.Origin?.Tank?.RightOutput ?? 0;
-                            else
-                                br = br_?.Origin?.Tank?.LeftOutput ?? 0;
-                        else if (br_?.Target?.Tank != t)
-                            if (br_?.Target?.ConnectionPosition == ConnectionPosition.BottomRight)
-                                br = br_?.Target?.Tank?.RightOutput ?? 0;
-                            else
-                                br = br_?.Target?.Tank?.LeftOutput ?? 0;
-
-
-                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        if(jobs.Count > 0)
                         {
-                            t.UpdateTank(e.CurrentTime, Simulator.SimulationInterval, tl, tr, bl, br);
-                        });
+                            endNotified = false;
 
-                    }
-                });
+                            var job = jobs.Dequeue();
+
+                            foreach (var t in Project.Levels.SelectMany(x => x.Items))
+                            {
+
+
+                                //obtém as conexões de cada tanque
+                                var r = Project.Connections.Where(x => x.Target.Tank == t || x.Origin.Tank == t).ToArray();
+
+                                double tl = 0;
+                                double tr = 0;
+                                double bl = 0;
+                                double br = 0;
+
+                                var tl_ = r.FirstOrDefault(x => x.Target.Tank == t && x.Type == LinkType.Unidiretional && x.Target.ConnectionPosition == ConnectionPosition.TopLeft);
+
+                                if (tl_?.Origin.ConnectionPosition == ConnectionPosition.BottomRight)
+                                    tl = tl_.Origin.Tank.RightOutput;
+                                else
+                                    tl = tl_?.Origin?.Tank?.LeftOutput ?? 0;
+
+                                var tr_ = r.FirstOrDefault(x => x.Target.Tank == t && x.Type == LinkType.Unidiretional && x.Target.ConnectionPosition == ConnectionPosition.TopRight);
+
+                                if (tr_?.Origin.ConnectionPosition == ConnectionPosition.BottomRight)
+                                    tr = tr_.Origin.Tank.RightOutput;
+                                else
+                                    tr = tr_?.Origin?.Tank?.LeftOutput ?? 0;
+
+
+
+                                var bl_ = r.FirstOrDefault(x =>
+                                    x.Type == LinkType.Bidiretional &&
+                                    ((x.Origin.Tank == t && x.Origin.ConnectionPosition == ConnectionPosition.BottomLeft) || (x.Target.Tank == t && x.Target.ConnectionPosition == ConnectionPosition.BottomLeft)));
+
+                                if (bl_?.Origin?.Tank != t)
+                                    if (bl_?.Origin?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                        bl = bl_?.Origin?.Tank?.RightOutput ?? 0;
+                                    else
+                                        bl = bl_?.Origin?.Tank?.LeftOutput ?? 0;
+                                else if (bl_?.Target?.Tank != t)
+                                    if (bl_?.Target?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                        bl = bl_?.Target?.Tank?.RightOutput ?? 0;
+                                    else
+                                        bl = bl_?.Target?.Tank?.LeftOutput ?? 0;
+
+                                var br_ = r.FirstOrDefault(x =>
+                                    x.Type == LinkType.Bidiretional &&
+                                    ((x.Origin.Tank == t && x.Origin.ConnectionPosition == ConnectionPosition.BottomRight) || (x.Target.Tank == t && x.Target.ConnectionPosition == ConnectionPosition.BottomRight)));
+
+                                if (br_?.Origin?.Tank != t)
+                                    if (br_?.Origin?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                        br = br_?.Origin?.Tank?.RightOutput ?? 0;
+                                    else
+                                        br = br_?.Origin?.Tank?.LeftOutput ?? 0;
+                                else if (br_?.Target?.Tank != t)
+                                    if (br_?.Target?.ConnectionPosition == ConnectionPosition.BottomRight)
+                                        br = br_?.Target?.Tank?.RightOutput ?? 0;
+                                    else
+                                        br = br_?.Target?.Tank?.LeftOutput ?? 0;
+
+
+                                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync<bool>(() =>
+                                {
+                                    t.UpdateTank(job.CurrentTime, Simulator.SimulationInterval, tl, tr, bl, br);
+                                    return true;
+                                });
+                            }
+                        }
+                        else
+                        {
+                            NotifyEnd();
+                            endNotified = true;
+                        }
+                    };
+                });                
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogService.GetService().Log("!! FALHA: " + ex.Message);
 
@@ -592,7 +630,7 @@ namespace MASLAB.ViewModels
         /// <param name="l">Dados da conexão entre dois tanques</param>
         private void OnConnectionCompleted(Link l)
         {
-            if(l == null)
+            if (l == null)
             {
                 LinkEnabled = false;
                 PointCollection = new List<Point>();
@@ -606,7 +644,7 @@ namespace MASLAB.ViewModels
 
             Project.Connections.Add(l);
             l.Points = new List<Point>(PointCollection);
-            
+
 
             PointCollection = new List<Point>();
         }
@@ -620,13 +658,14 @@ namespace MASLAB.ViewModels
         {
             try
             {
+                ChartControl = (Control)control;
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
                 saveFileDialog1.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo .png
-                { 
-                    Name = "Imagem PNG (*.png)", 
-                    Extensions = new List<string> { ".png" } 
+                {
+                    Name = "Imagem PNG (*.png)",
+                    Extensions = new List<string> { ".png" }
                 });
-                
+
                 saveFileDialog1.Filters.Add(new FileDialogFilter() //configura a extensão do arquivo .mat
                 {
                     Extensions = new List<string> { "mat" },
@@ -656,7 +695,7 @@ namespace MASLAB.ViewModels
                             break;
                     }
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -671,7 +710,8 @@ namespace MASLAB.ViewModels
         /// <param name="filename">Caminho para o arquivo</param>
         private void ExportPng(object control, string filename)
         {
-            var target = control as TabControl;
+            var target = control as Control;
+            
             var pixelSize = new PixelSize((int)target.Bounds.Width, (int)target.Bounds.Height);
             var size = new Size(target.Bounds.Width, target.Bounds.Height);
             var dpiVector = new Vector(96, 96);
@@ -734,7 +774,7 @@ namespace MASLAB.ViewModels
                 string[] labels = new string[ChartService.Model.Series.Count * 2];
                 for (int i = 0; i < ChartService.Model.Series.Count * 2; i = i + 2)
                 {
-                    LineSeries serie = (LineSeries)ChartService.Model.Series[i/2];
+                    LineSeries serie = (LineSeries)ChartService.Model.Series[i / 2];
                     for (int j = 0; j < serie.Points.Count; j++)
                     {
                         data[j, i] = serie.Points[j].X;

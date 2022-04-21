@@ -24,6 +24,7 @@ namespace MASLAB.Services
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location, documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Runtime.Extensions.xml")),
                 MetadataReference.CreateFromFile(typeof(App).Assembly.Location, documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/MASLAB.xml")),
                 MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Runtime.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Runtime.xml")),
+                MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Linq.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Linq.xml")),
                 MetadataReference.CreateFromFile(Path.Combine(assemblyDir, "System.Private.Uri.dll")),
                 MetadataReference.CreateFromFile(Path.Combine(appDir, "System.IO.Ports.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.IO.Ports.xml")),
                 MetadataReference.CreateFromFile(Path.Combine(appDir, "System.Text.Json.dll"), documentation: XmlDocumentationProvider.CreateFromFile($"{appDir}/XML/System.Text.Json.xml")),

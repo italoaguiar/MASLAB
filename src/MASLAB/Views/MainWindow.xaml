@@ -71,7 +71,7 @@
   </Window.Styles>
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel ChartControl="{Binding ElementName=plot}"/>
     </Design.DataContext>
 
   <Grid RowDefinitions="Auto,Auto,*,Auto" Background="#2B579A">
@@ -88,7 +88,7 @@
           </MenuItem.Icon>
         </MenuItem>
         <Separator/>
-        <MenuItem Command="{Binding ExportCommand}" CommandParameter="{Binding ElementName=tabControl}" Header="Expor_tar" Foreground="Black">
+        <MenuItem Command="{Binding ExportCommand}" CommandParameter="{Binding ElementName=plot}" Header="Expor_tar" Foreground="Black">
           <MenuItem.Icon>
             <Image Source="/Assets/export-icon.png"/>
           </MenuItem.Icon>

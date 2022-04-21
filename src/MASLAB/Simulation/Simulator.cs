@@ -211,6 +211,14 @@ namespace Simulation
             }
         }
 
+        /// <summary>
+        /// Redefine o tempo da simulação para o instante zero
+        /// </summary>
+        public void Reset()
+        {
+            SimulationTime = TimeSpan.Zero;
+        }
+
 
         private void OnPropertyChanged(string propertyName) => 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
