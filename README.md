@@ -34,11 +34,11 @@ MASLAB inclui alguns métodos embutidos no código de simulação de cada tanque
 MASLAB está diponível para o Windows, Linux e macOS.
 
 # Instalação
-[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.4/total?color=%235b8dde&label=Pacote%20zip%20Windows%200.0.0.4&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.4/MASLAB.win-x64.zip)
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.5/total?color=%235b8dde&label=Pacote%20zip%20Windows%200.0.0.4&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.5/MASLAB.win-x64.zip)
 
-[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.4/total?color=%237ad128&label=Pacote%20zip%20macOS%200.0.0.4&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.4/MASLAB.osx-x64.zip)
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.5/total?color=%237ad128&label=Pacote%20zip%20macOS%200.0.0.4&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.5/MASLAB.osx-x64.zip)
 
-[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.4/total?label=Pacote%20.deb%20Linux%200.0.0.4&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.4/MASLAB.linux-x64.deb) 
+[![link](https://img.shields.io/github/downloads/italoaguiar/MASLAB/0.0.0.5/total?label=Pacote%20.deb%20Linux%200.0.0.4&style=for-the-badge)](https://github.com/italoaguiar/MASLAB/releases/download/0.0.0.5/MASLAB.linux-x64.deb) 
 
 Basta fazer o download da versão adequada ao seu sistema operacional e executar, ou descompactar o arquivo para uma pasta, caso opte pela versão zip.
 
