@@ -53,8 +53,28 @@ Basta fazer o download da versão adequada ao seu sistema operacional e executar
 
 # Sobre o software
 Desenvolvido por [Ítalo A. Aguiar](https://github.com/italoaguiar/)
-Sob orientação de Rodrigo Augusto Ricco.
+Sob orientação de [Rodrigo Geraldo Ribeiro](https://github.com/rodrigogribeiro) e [Rodrigo Augusto Ricco](https://github.com/RaRicco).
 
-Instituto de Ciências Exatas e Aplicadas - ICEA
+<br/>
 
-Universidade Federal de Ouro Preto - UFOP
+**[Universidade Federal de Ouro Preto - UFOP](http://www.ufop.br/)**
+
+[Programa de Pós Graduação em Ciência da Computação - PPGCC](http://www3.decom.ufop.br/pos/inicio/)
+
+[Instituto de Ciências Exatas e Biológicas - ICEB](https://iceb.ufop.br)
+
+[Departamento de Computação - DECOM](http://www3.decom.ufop.br/decom/inicio/)
+
+[![XR4Good](https://i.ibb.co/Fmx8Hbk/Imagem1.png)](https://xr4goodlab.decom.ufop.br)
+
+
+<br/>
+
+
+**[Universidade Federal de Ouro Preto - UFOP](http://www.ufop.br/)**
+
+[Instituto de Ciências Exatas e Aplicadas - ICEA](https://icea.ufop.br)
+
+[Departamento de Engenharia Elétrica - DEELT](https://icea.ufop.br/deelt)
+
+
